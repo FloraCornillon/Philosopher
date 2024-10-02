@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-t_table	*Init_table(int argc, char **argv)
+t_table	*init_table(int argc, char **argv)
 {
 	t_table	*table;
 	
@@ -33,4 +33,75 @@ t_table	*Init_table(int argc, char **argv)
 		return (NULL);
 	}
 	return (table);
+}
+
+
+t_philo	*init_philo(t_table *table)
+{
+	t_philo	*philo;
+	ssize_t	i;
+
+	i = 0;
+	philo = malloc(sizeof(t_philo) * table->nb_of_philo);
+	if (!philo)
+		return (NULL);
+	memset(philo, 0, sizeof(t_philo) * table->nb_of_philo);
+	while (i < table->nb_of_philo)
+	{
+		philo[i].id = i + 1;
+		philo[i].left_fork = &table->forks[i];
+		philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
+		i++;
+	}
+	return (philo);
+}
+bool 	init_thread(int nb_of_philo, t_philo *philo)
+{
+	pthread_t	threads[nb_of_philo];
+	ssize_t	i;
+
+	i = 0;
+	while (i < nb_of_philo)
+	{
+		if (pthread_create(&threads[i], NULL, philo_routine, &philo[i]) != 0)
+		{
+			printf(RED"Failed to create thread %zu\n"RST, i);
+			return (false);
+		}
+		i++;
+	}
+	i = 0;
+	while (i < nb_of_philo)
+	{
+		if (pthread_join(threads[i], NULL) != 0)
+		{
+			printf(RED"Failed to join thread %zu\n"RST, i);
+			return (false);
+		}
+		i++;
+	}
+	return (true);
+}
+
+bool	init_all(int argc, char **argv)
+{
+	t_table		*table;
+	t_philo		*philo;
+
+	table = init_table(argc, argv);
+	if (!table)
+		return (false);
+	philo = init_philo(table);
+	if (!philo)
+	{
+		free(table);
+		return (false);
+	}
+	if (!init_thread(table->nb_of_philo, philo))
+	{
+		free(table);
+		free(philo);
+		return (false);
+	}
+	return (true);
 }

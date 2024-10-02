@@ -23,7 +23,7 @@ size_t	ft_strlen(const char *str)
 }
 
 
-int	Error_handle(const char *str, int ret)
+int	error_handle(const char *str, int ret)
 {
 	printf(RED"%s"RST, str);
 	return (ret);

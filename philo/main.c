@@ -30,19 +30,13 @@
 int	main(int argc, char **argv)
 {
 	if (argc < 5 || argc > 6)
-		return (Error_handle("Format: <number_of_philosophers> <time_to_die> <time_to_eat> \
+		return (error_handle("Format: <number_of_philosophers> <time_to_die> <time_to_eat> \
 <time_to_sleep> [number_of_times_each_philosopher_must_eat]\n", 1));
-	t_table	*table;
-	// t_philo *philo;
-	size_t	i;
 	
-	i = 0;
-	if (!Parse_input(argc, argv))
+	if (!parse_input(argc, argv))
 		return (1);
-	table = Init_table(argc, argv);
-	if (!table)
+	if (!init_all(argc, argv))
 		return (1);
-	free(table);
 	return (0);
 }
 

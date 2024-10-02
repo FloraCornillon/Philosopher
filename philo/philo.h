@@ -22,8 +22,10 @@
 #include <sys/time.h>
 #include <pthread.h>
 
-#define RST	"\033[0m"
-#define RED	"\033[1;31m"
+#define RST	   "\033[0m"
+#define RED	   "\033[1;31m"
+#define GREEN  "\033[1;32m"
+#define YELLOW "\033[1;33m"
 
 typedef struct s_philo
 {
@@ -42,12 +44,16 @@ typedef struct s_table
 	pthread_mutex_t	*forks;
 }	t_table;
 
-bool	Is_positive_num(const char *str);
-bool	Parse_input(int argc, char **argv);
+bool	is_positive_num(const char *str);
+bool	parse_input(int argc, char **argv);
 size_t	ft_strlen(const char *str);
 ssize_t	ft_atosst(const char *str, size_t i);
-t_table	*Init_table(int argc, char **argv);
-int		Error_handle(const char *str, int ret);
+t_table	*init_table(int argc, char **argv);
+void	*philo_routine(void *arg);
+t_philo	*init_philo(t_table *table);
+bool 	init_thread(int nb_of_philo, t_philo *philo);
+bool	init_all(int argc, char **argv);
+int		error_handle(const char *str, int ret);
 
 
 #endif

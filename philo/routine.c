@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-void	*Philo_routine(void *arg)
+void	*philo_routine(void *arg)
 {
 	t_philo	*philo;
 
@@ -23,11 +23,9 @@ void	*Philo_routine(void *arg)
 		pthread_mutex_lock(philo->left_fork);
 		pthread_mutex_lock(philo->right_fork);
 		printf(GREEN"Philosopher %zu is eating\n"RST, philo->id);
-		usleep(1000 * philo->time_to_eat);
 		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
 		printf(GREEN"Philosopher %zu is sleeping\n"RST, philo->id);
-		usleep(1000 * philo->time_to_sleep);
 	}
 	return (NULL);
 }
