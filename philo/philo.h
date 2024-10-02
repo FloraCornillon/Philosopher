@@ -52,8 +52,10 @@ t_table	*init_table(int argc, char **argv);
 void	*philo_routine(void *arg);
 t_philo	*init_philo(t_table *table);
 bool 	init_thread(int nb_of_philo, t_philo *philo);
+bool	init_mutexes(t_table *table);
 bool	init_all(int argc, char **argv);
 int		error_handle(const char *str, int ret);
+void	destroy_mutexes(t_table *table);
 
 
 #endif

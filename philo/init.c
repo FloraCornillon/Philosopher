@@ -35,6 +35,27 @@ t_table	*init_table(int argc, char **argv)
 	return (table);
 }
 
+bool	init_mutexes(t_table *table)
+{
+	ssize_t	i;
+
+	i = 0;
+	table->forks = malloc(sizeof(pthread_mutex_t) * table->nb_of_philo);
+	memset(table->forks, 0, sizeof(pthread_mutex_t) * table->nb_of_philo);
+	if (!table->forks)
+		return (false);
+	while (i < table->nb_of_philo)
+	{
+		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
+		{
+			printf(RED"Failed to init mutex %zu\n"RST, i);
+			return (false);
+		}
+		i++;
+	}
+	return (true);
+}
+
 
 t_philo	*init_philo(t_table *table)
 {
@@ -55,6 +76,7 @@ t_philo	*init_philo(t_table *table)
 	}
 	return (philo);
 }
+
 bool 	init_thread(int nb_of_philo, t_philo *philo)
 {
 	pthread_t	threads[nb_of_philo];
@@ -91,17 +113,27 @@ bool	init_all(int argc, char **argv)
 	table = init_table(argc, argv);
 	if (!table)
 		return (false);
+	if (!init_mutexes(table))
+	{
+		free(table);
+		return (false);
+	}
 	philo = init_philo(table);
 	if (!philo)
 	{
+		destroy_mutexes(table);
 		free(table);
 		return (false);
 	}
 	if (!init_thread(table->nb_of_philo, philo))
 	{
+		destroy_mutexes(table);
 		free(table);
 		free(philo);
 		return (false);
 	}
+	destroy_mutexes(table);
+	free(table);
+	free(philo);
 	return (true);
 }

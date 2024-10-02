@@ -28,7 +28,7 @@ fclean: clean
 	rm -rf $(BIN)
 
 valgrind:
-	make && valgrind --leak-check=full --show-leak-kinds=all ./(NAME)
+	make && valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 
 re: fclean all
 

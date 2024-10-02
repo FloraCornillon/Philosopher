@@ -28,3 +28,16 @@ int	error_handle(const char *str, int ret)
 	printf(RED"%s"RST, str);
 	return (ret);
 }
+
+void	destroy_mutexes(t_table *table)
+{
+	ssize_t	i;
+
+	i = 0;
+	while (i < table->nb_of_philo)
+	{
+		pthread_mutex_destroy(&table->forks[i]);
+		i++;
+	}
+	free(table->forks);
+}
