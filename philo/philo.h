@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:44 by fcornill          #+#    #+#             */
-/*   Updated: 2024/09/25 17:44:11 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:48:23 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 typedef struct s_philo
 {
 	size_t	id;
+	size_t	nb_of_meal;
 	pthread_mutex_t *left_fork;
 	pthread_mutex_t *right_fork;
 }	t_philo;
@@ -40,8 +41,9 @@ typedef struct s_table
 	ssize_t	time_to_die;
 	ssize_t	time_to_eat;
 	ssize_t	time_to_sleep;
-	ssize_t	nb_of_meal;
+	ssize_t	nb_of_time_to_eat;
 	pthread_mutex_t	*forks;
+	t_philo	*philo;
 }	t_table;
 
 bool	is_positive_num(const char *str);

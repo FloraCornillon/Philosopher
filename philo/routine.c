@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:00:38 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/01 13:26:13 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:41:09 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 void	*philo_routine(void *arg)
 {
 	t_philo	*philo;
+	int i = 0;
 
 	philo = (t_philo *)arg;
-	while (1)
+	while (i < 1000000)//remplacer par nb_time_to_eat
 	{
 		printf(GREEN"Philosopher %zu is thinking\n"RST, philo->id);
 		pthread_mutex_lock(philo->left_fork);
