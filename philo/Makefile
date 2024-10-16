@@ -5,7 +5,7 @@ SANITIZE = -fsanitize=thread
 
 BIN = ./bin/
 
-SRC = main.c utils.c parsing.c init.c routine.c
+SRC = main.c utils.c parsing.c init.c routine.c philo.c
 OBJ = $(addprefix $(BIN), $(SRC:%.c=%.o))
 
 all: $(NAME)

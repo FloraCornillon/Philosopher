@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:44:15 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/03 15:39:43 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/16 16:14:26 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_table	*init_table(int argc, char **argv)
 	table->time_to_die = ft_atosst(argv[2], 2);
 	table->time_to_eat = ft_atosst(argv[3], 3);
 	table->time_to_sleep = ft_atosst(argv[4], 4);
+	table->start_simulation = get_timestamp_ms();
 	if (argc == 6)
 		table->nb_of_time_to_eat = ft_atosst(argv[5], 5);
 	else
@@ -74,6 +75,7 @@ t_philo	*init_philo(t_table *table)
 		philo[i].id = i + 1;
 		philo[i].left_fork = &table->forks[i];
 		philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
+		philo[i].table = table;
 		i++;
 	}
 	return (philo);
@@ -82,6 +84,7 @@ t_philo	*init_philo(t_table *table)
 bool 	init_thread(int nb_of_philo, t_philo *philo)
 {
 	pthread_t	threads[nb_of_philo];
+	
 	ssize_t	i;
 
 	i = 0;
