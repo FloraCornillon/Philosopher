@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:44:15 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/16 16:14:26 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/17 19:45:56 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_table	*init_table(int argc, char **argv)
 	table->time_to_eat = ft_atosst(argv[3], 3);
 	table->time_to_sleep = ft_atosst(argv[4], 4);
 	table->start_simulation = get_timestamp_ms();
+	table->dead = false;
 	if (argc == 6)
 		table->nb_of_time_to_eat = ft_atosst(argv[5], 5);
 	else
@@ -44,9 +45,9 @@ bool	init_mutexes(t_table *table)
 
 	i = 0;
 	table->forks = malloc(sizeof(pthread_mutex_t) * table->nb_of_philo);
-	memset(table->forks, 0, sizeof(pthread_mutex_t) * table->nb_of_philo);
 	if (!table->forks)
 		return (false);
+	memset(table->forks, 0, sizeof(pthread_mutex_t) * table->nb_of_philo);
 	while (i < table->nb_of_philo)
 	{
 		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
@@ -56,6 +57,8 @@ bool	init_mutexes(t_table *table)
 		}
 		i++;
 	}
+	if (pthread_mutex_init(&table->global, NULL) != 0)
+		return (false);
 	return (true);
 }
 
@@ -110,6 +113,8 @@ bool 	init_thread(int nb_of_philo, t_philo *philo)
 	return (true);
 }
 
+
+
 bool	init_all(int argc, char **argv)
 {
 	t_table		*table;
@@ -133,12 +138,12 @@ bool	init_all(int argc, char **argv)
 	if (!init_thread(table->nb_of_philo, philo))
 	{
 		destroy_mutexes(table);
-		free(table);
 		free(philo);
+		free(table);
 		return (false);
 	}
 	destroy_mutexes(table);
-	free(table);
 	free(philo);
+	free(table);
 	return (true);
 }

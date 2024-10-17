@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 17:17:04 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/16 15:47:29 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/17 18:38:46 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	destroy_mutexes(t_table *table)
 	free(table->forks);
 }
 
-size_t	get_timestamp_ms(void)
+ssize_t	get_timestamp_ms(void)
 {
 	struct timeval	now;
 	
@@ -53,9 +53,5 @@ size_t	get_timestamp_ms(void)
 
 void	ft_usleep(size_t time)
 {
-	size_t	start;
-	
-	start = get_timestamp_ms();
-	while ((get_timestamp_ms() - start) < time)
-		usleep(150); //a ajusté
+	usleep(time * 1000);
 }
