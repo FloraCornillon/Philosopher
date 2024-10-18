@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:00:38 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/01 13:26:13 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/17 19:40:22 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,47 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (1)
+	pthread_mutex_lock(&philo->table->global);
+	philo->last_meal = get_timestamp_ms();
+	pthread_mutex_unlock(&philo->table->global);
+	pthread_create(&philo->supervisor, NULL, &is_dead, philo);
+	pthread_detach(philo->supervisor);
+	if (philo->id % 2 == 0)
+		ft_usleep(1);
+	// if (philo->table->nb_of_philo == 1)
+	// 	fonction pour gerer un philo
+	while (philo->nb_of_meal < philo->table->nb_of_time_to_eat)
 	{
-		printf(GREEN"Philosopher %zu is thinking\n"RST, philo->id);
-		pthread_mutex_lock(philo->left_fork);
-		pthread_mutex_lock(philo->right_fork);
-		printf(GREEN"Philosopher %zu is eating\n"RST, philo->id);
-		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(philo->left_fork);
-		printf(GREEN"Philosopher %zu is sleeping\n"RST, philo->id);
+		pthread_mutex_lock(&philo->table->global);
+		if (philo->table->dead)
+		{
+			pthread_mutex_unlock(&philo->table->global);
+			break;
+		}
+    	pthread_mutex_unlock(&philo->table->global);
+    	print_msg(philo, "is thinking");
+    	if (!take_fork(philo))
+        	break;
+    	print_msg(philo, "is eating");
+    	pthread_mutex_lock(&philo->table->global);
+    	philo->last_meal = get_timestamp_ms();
+   	 	philo->nb_of_meal++;
+   		pthread_mutex_unlock(&philo->table->global);
+		ft_usleep(philo->table->time_to_eat);
+		if (!unlock_fork(philo))
+			break ;
 	}
 	return (NULL);
 }
+
+
+
+
+
+
+
+		// printf(BLUE"%zu Philosopher %zu is thinking\n"RST, get_timestamp_ms(), philo->id);
+		// printf(GREEN"%zu Philosopher %zu is eating\n"RST, get_timestamp_ms(), philo->id);
+		// pthread_mutex_unlock(philo->right_fork);
+		// pthread_mutex_unlock(philo->left_fork);
+		// printf(MAG"%zu Philosopher %zu is sleeping\n"RST, get_timestamp_ms(), philo->id);

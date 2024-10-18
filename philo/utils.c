@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 17:17:04 by fcornill          #+#    #+#             */
-/*   Updated: 2024/09/25 16:36:30 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/17 18:38:46 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,18 @@ void	destroy_mutexes(t_table *table)
 		i++;
 	}
 	free(table->forks);
+}
+
+ssize_t	get_timestamp_ms(void)
+{
+	struct timeval	now;
+	
+	if (gettimeofday(&now, NULL) == -1)
+		printf(RED"Gettimeofday failed\n"RST);
+	return (now.tv_sec * 1000 + now.tv_usec / 1000);
+}
+
+void	ft_usleep(size_t time)
+{
+	usleep(time * 1000);
 }

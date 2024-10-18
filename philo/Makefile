@@ -5,7 +5,7 @@ FLAGS = -Wall -Wextra -Werror -pthread -O2
 
 BIN = ./bin/
 
-SRC = main.c utils.c parsing.c init.c routine.c
+SRC = main.c utils.c parsing.c init.c routine.c philo.c
 OBJ = $(addprefix $(BIN), $(SRC:%.c=%.o))
 
 all: $(NAME)
