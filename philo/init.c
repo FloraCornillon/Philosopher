@@ -50,17 +50,21 @@ bool	init_mutexes(t_table *table)
 	}
 	if (pthread_mutex_init(&table->global, NULL) != 0)
 		return (false);
+	if (pthread_mutex_init(&table->write_lock, NULL) != 0)
+		return (false);
 	return (true);
 }
 
 
-bool	init_philo(t_table *table, t_philo *philo)
+t_philo	*init_philo(t_table *table)
 {
 	ssize_t	i;
+	t_philo	*philo;
 
 	i = 0;
+	philo = malloc(sizeof(t_philo) * table->nb_of_philo);
 	if (!philo)
-		return (false);
+		return (NULL);
 	memset(philo, 0, sizeof(t_philo) * table->nb_of_philo);
 	while (i < table->nb_of_philo)
 	{
@@ -70,10 +74,10 @@ bool	init_philo(t_table *table, t_philo *philo)
 		philo[i].table = table;
 		i++;
 	}
-	return (true);
+	return (philo);
 }
 
-bool 	init_thread(int nb_of_philo, t_philo *philo)
+bool 	init_thread(ssize_t nb_of_philo, t_philo *philo)
 {
 	pthread_t	threads[nb_of_philo];
 	ssize_t	i;
@@ -102,22 +106,25 @@ bool 	init_thread(int nb_of_philo, t_philo *philo)
 bool	init_all(int argc, char **argv)
 {
 	t_table		table;
-	t_philo		philo;
+	t_philo		*philo;
 
-	if (!init_table(argc, argv, &table));
+	if (!init_table(argc, argv, &table))
 		return (false);
 	if (!init_mutexes(&table))
 		return (false);
-	if (!init_philo(&table, &philo))
+	philo = init_philo(&table);
+	if (!philo)
 	{
 		destroy_mutexes(&table);
 		return (false);
 	}
-	if (!init_thread(&table.nb_of_philo, &philo))
+	if (!init_thread(table.nb_of_philo, philo))
 	{
 		destroy_mutexes(&table);
+		free(philo);
 		return (false);
 	}
 	destroy_mutexes(&table);
+	free(philo);
 	return (true);
 }
