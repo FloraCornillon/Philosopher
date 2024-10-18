@@ -32,7 +32,6 @@ int	main(int argc, char **argv)
 	if (argc < 5 || argc > 6)
 		return (error_handle("Format: <number_of_philosophers> <time_to_die> <time_to_eat> \
 <time_to_sleep> [number_of_times_each_philosopher_must_eat]\n", 1));
-	
 	if (!parse_input(argc, argv))
 		return (1);
 	if (!init_all(argc, argv))
