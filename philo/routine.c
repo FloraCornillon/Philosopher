@@ -12,42 +12,27 @@
 
 #include "philo.h"
 
-void	*philo_routine(void *arg)
+void	*philo_routine(void *ptr)
 {
 	t_philo	*philo;
 
-	philo = (t_philo *)arg;
+	philo = (t_philo *)ptr;
+	// pthread_create(&philo->supervisor, NULL, &supervisor_routine, philo);
+	// pthread_detach(philo->supervisor);
 	pthread_mutex_lock(&philo->table->global);
 	philo->last_meal = get_timestamp_ms();
 	pthread_mutex_unlock(&philo->table->global);
-	pthread_create(&philo->supervisor, NULL, &supervisor_routine, philo);
-	pthread_detach(philo->supervisor);
 	if (philo->id % 2 == 0)
 		ft_usleep(1);
 	// if (philo->table->nb_of_philo == 1)
 	// 	fonction pour gerer un philo
-	while (philo->nb_of_meal < philo->table->nb_of_time_to_eat)
+	while (!is_dead(philo))
 	{
-		pthread_mutex_lock(&philo->table->global);
-		if (philo->table->dead)
-		{
-			pthread_mutex_unlock(&philo->table->global);
-			break;
-		}
-    	pthread_mutex_unlock(&philo->table->global);
-    	print_msg(philo, "is thinking");
-    	if (!take_fork(philo))
-        	break;
-    	print_msg(philo, "is eating");
-    	pthread_mutex_lock(&philo->table->global);
-    	philo->last_meal = get_timestamp_ms();
-   	 	philo->nb_of_meal++;
-   		pthread_mutex_unlock(&philo->table->global);
-		ft_usleep(philo->table->time_to_eat);
-		if (!unlock_fork(philo))
-			break ;
+		ft_think(philo);
+		ft_eat(philo);
+		ft_sleep(philo);
 	}
-	return (NULL);
+	return (ptr);
 }
 
 void	*supervisor_routine(void *arg)

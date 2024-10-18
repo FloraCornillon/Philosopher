@@ -39,6 +39,8 @@ void	destroy_mutexes(t_table *table)
 		pthread_mutex_destroy(&table->forks[i]);
 		i++;
 	}
+	pthread_mutex_destroy(&table->global);
+	pthread_mutex_destroy(&table->write_lock);
 	free(table->forks);
 }
 

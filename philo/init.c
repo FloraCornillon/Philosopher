@@ -38,6 +38,9 @@ bool	init_mutexes(t_table *table)
 	ssize_t	i;
 
 	i = 0;
+	table->forks = malloc(sizeof(pthread_mutex_t) * table->nb_of_philo);
+	if (!table->forks)
+		return (false);
 	memset(table->forks, 0, sizeof(pthread_mutex_t) * table->nb_of_philo);
 	while (i < table->nb_of_philo)
 	{
