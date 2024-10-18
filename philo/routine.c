@@ -20,7 +20,7 @@ void	*philo_routine(void *arg)
 	pthread_mutex_lock(&philo->table->global);
 	philo->last_meal = get_timestamp_ms();
 	pthread_mutex_unlock(&philo->table->global);
-	pthread_create(&philo->supervisor, NULL, &is_dead, philo);
+	pthread_create(&philo->supervisor, NULL, &supervisor_routine, philo);
 	pthread_detach(philo->supervisor);
 	if (philo->id % 2 == 0)
 		ft_usleep(1);
@@ -50,7 +50,31 @@ void	*philo_routine(void *arg)
 	return (NULL);
 }
 
+void	*supervisor_routine(void *arg)
+{
+	t_philo *philo;
 
+	philo = (t_philo *)arg;
+	while (!philo->table->dead)
+	{
+		pthread_mutex_lock(&philo->table->global);
+		if (philo->table->dead)  // vérifier si un philosophe est mort
+		{
+			pthread_mutex_unlock(&philo->table->global);
+			break;
+		}
+		if ((get_timestamp_ms() - philo->last_meal) > philo->table->time_to_die)
+		{
+			 print_msg(philo, "is dead");
+    		philo->table->dead = true;
+    		pthread_mutex_unlock(&philo->table->global);
+    		break ;
+		}
+		pthread_mutex_unlock(&philo->table->global);
+		ft_usleep(1);
+	}
+	return (NULL);
+}
 
 
 

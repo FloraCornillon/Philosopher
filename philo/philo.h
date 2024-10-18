@@ -39,6 +39,7 @@ typedef struct s_table
 	ssize_t	nb_of_time_to_eat;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t global;
+	pthread_mutex_t *write_lock;
 	bool	dead;
 }	t_table;
 
@@ -59,9 +60,9 @@ bool	is_positive_num(const char *str);
 bool	parse_input(int argc, char **argv);
 size_t	ft_strlen(const char *str);
 ssize_t	ft_atosst(const char *str, size_t i);
-t_table	*init_table(int argc, char **argv);
+bool	init_table(int argc, char **argv, t_table *table);
 void	*philo_routine(void *arg);
-t_philo	*init_philo(t_table *table);
+bool	init_philo(t_table *table, t_philo *philo);
 bool 	init_thread(int nb_of_philo, t_philo *philo);
 bool	init_mutexes(t_table *table);
 bool	init_all(int argc, char **argv);
@@ -69,11 +70,10 @@ int		error_handle(const char *str, int ret);
 void	destroy_mutexes(t_table *table);
 ssize_t	get_timestamp_ms(void);
 void	ft_usleep(size_t time);
-void	*is_dead(void *arg);
+void	*supervisor_routine(void *arg);
 void	print_msg(t_philo *philo, const char *msg);
 void	ft_sleep(t_philo *philo);
-bool	take_fork(t_philo *philo);
-bool	unlock_fork(t_philo *philo);
+void	ft_think(t_philo *philo);
 
 
 #endif

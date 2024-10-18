@@ -12,13 +12,10 @@
 
 #include "philo.h"
 
-t_table	*init_table(int argc, char **argv)
-{
-	t_table	*table;
-	
-	table = malloc(sizeof(t_table));
+bool	init_table(int argc, char **argv, t_table *table)
+{	
 	if (!table)
-		return (NULL);
+		return (false);
 	memset(table, 0, sizeof(t_table));
 	table->nb_of_philo = ft_atosst(argv[1], 1);
 	table->time_to_die = ft_atosst(argv[2], 2);
@@ -29,13 +26,10 @@ t_table	*init_table(int argc, char **argv)
 	if (argc == 6)
 		table->nb_of_time_to_eat = ft_atosst(argv[5], 5);
 	else
-		table->nb_of_time_to_eat = 999999999999999999;
+		table->nb_of_time_to_eat = -2;
 	if (table->nb_of_philo == -1 || table->time_to_die == -1 || table->time_to_eat == -1 \
 || table->time_to_sleep == -1 || table->nb_of_time_to_eat == -1)
-	{
-		free(table);
-		return (NULL);
-	}
+		return (false);
 	return (table);
 }
 
@@ -44,9 +38,6 @@ bool	init_mutexes(t_table *table)
 	ssize_t	i;
 
 	i = 0;
-	table->forks = malloc(sizeof(pthread_mutex_t) * table->nb_of_philo);
-	if (!table->forks)
-		return (false);
 	memset(table->forks, 0, sizeof(pthread_mutex_t) * table->nb_of_philo);
 	while (i < table->nb_of_philo)
 	{
@@ -63,15 +54,13 @@ bool	init_mutexes(t_table *table)
 }
 
 
-t_philo	*init_philo(t_table *table)
+bool	init_philo(t_table *table, t_philo *philo)
 {
-	t_philo	*philo;
 	ssize_t	i;
 
 	i = 0;
-	philo = malloc(sizeof(t_philo) * table->nb_of_philo);
 	if (!philo)
-		return (NULL);
+		return (false);
 	memset(philo, 0, sizeof(t_philo) * table->nb_of_philo);
 	while (i < table->nb_of_philo)
 	{
@@ -81,7 +70,7 @@ t_philo	*init_philo(t_table *table)
 		philo[i].table = table;
 		i++;
 	}
-	return (philo);
+	return (true);
 }
 
 bool 	init_thread(int nb_of_philo, t_philo *philo)
@@ -117,33 +106,23 @@ bool 	init_thread(int nb_of_philo, t_philo *philo)
 
 bool	init_all(int argc, char **argv)
 {
-	t_table		*table;
-	t_philo		*philo;
+	t_table		table;
+	t_philo		philo;
 
-	table = init_table(argc, argv);
-	if (!table)
+	if (!init_table(argc, argv, &table));
 		return (false);
-	if (!init_mutexes(table))
+	if (!init_mutexes(&table))
+		return (false);
+	if (!init_philo(&table, &philo))
 	{
-		free(table);
+		destroy_mutexes(&table);
 		return (false);
 	}
-	philo = init_philo(table);
-	if (!philo)
+	if (!init_thread(&table.nb_of_philo, &philo))
 	{
-		destroy_mutexes(table);
-		free(table);
+		destroy_mutexes(&table);
 		return (false);
 	}
-	if (!init_thread(table->nb_of_philo, philo))
-	{
-		destroy_mutexes(table);
-		free(philo);
-		free(table);
-		return (false);
-	}
-	destroy_mutexes(table);
-	free(philo);
-	free(table);
+	destroy_mutexes(&table);
 	return (true);
 }

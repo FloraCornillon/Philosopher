@@ -12,54 +12,23 @@
 
 #include "philo.h"
 
-void	*is_dead(void *arg)
-{
-	t_philo *philo;
 
-	philo = (t_philo *)arg;
-	while (!philo->table->dead)
-	{
-		pthread_mutex_lock(&philo->table->global);
-		if (philo->table->dead)  // vérifier si un philosophe est mort
-		{
-			pthread_mutex_unlock(&philo->table->global);
-			break;
-		}
-		if ((get_timestamp_ms() - philo->last_meal) > philo->table->time_to_die)
-		{
-			 print_msg(philo, "is dead");
-    		philo->table->dead = true;
-    		pthread_mutex_unlock(&philo->table->global);
-    		break ;
-		}
-		pthread_mutex_unlock(&philo->table->global);
-		ft_usleep(1);
-	}
-	return (NULL);
-}
 
 void	print_msg(t_philo *philo, const char *msg)
 {
 	size_t	time;
 
+	pthread_mutex_lock(philo->table->write_lock);
 	time = (get_timestamp_ms() - philo->table->start_simulation);
 	printf("%zu %02zu %s\n", time, philo->id, msg);
+	pthread_mutex_unlock(philo->table->write_lock);
 }
 
-bool	take_fork(t_philo *philo)
+void	ft_think(t_philo *philo)
 {
-	if (philo->left_fork == NULL || philo->right_fork == NULL)
-		return (false);
-	if (pthread_mutex_lock(philo->left_fork) != 0)
-		return (false);
-	if (pthread_mutex_lock(philo->right_fork) != 0)
-	{
-		pthread_mutex_unlock(philo->left_fork);
-		return (false);
-	}
-	print_msg(philo, "has taken a fork");
-	return (true);
+	print_msg(philo, "is thinking");
 }
+
 
 void	ft_sleep(t_philo *philo)
 {
@@ -67,13 +36,3 @@ void	ft_sleep(t_philo *philo)
 	ft_usleep(philo->table->time_to_sleep);
 }
 
-bool	unlock_fork(t_philo *philo)
-{
-	if (philo->left_fork == NULL || philo->right_fork == NULL)
-		return (false);
-	if (pthread_mutex_unlock(philo->right_fork) != 0)
-		return (false);
-	if (pthread_mutex_unlock(philo->left_fork) != 0)
-		return (false);
-	return (true);
-}

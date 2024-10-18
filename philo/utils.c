@@ -53,5 +53,9 @@ ssize_t	get_timestamp_ms(void)
 
 void	ft_usleep(size_t time)
 {
-	usleep(time * 1000);
+	size_t	start;
+
+	start = get_timestamp_ms();
+	while (get_timestamp_ms() - start < time)
+		usleep(500);
 }
