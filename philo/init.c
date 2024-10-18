@@ -30,7 +30,7 @@ bool	init_table(int argc, char **argv, t_table *table)
 	if (table->nb_of_philo == -1 || table->time_to_die == -1 || table->time_to_eat == -1 \
 || table->time_to_sleep == -1 || table->nb_of_time_to_eat == -1)
 		return (false);
-	return (table);
+	return (true);
 }
 
 bool	init_mutexes(t_table *table)
@@ -76,33 +76,28 @@ bool	init_philo(t_table *table, t_philo *philo)
 bool 	init_thread(int nb_of_philo, t_philo *philo)
 {
 	pthread_t	threads[nb_of_philo];
-	
 	ssize_t	i;
 
-	i = 0;
-	while (i < nb_of_philo)
+	i = -1;
+	while (++i < nb_of_philo)
 	{
 		if (pthread_create(&threads[i], NULL, philo_routine, &philo[i]) != 0)
 		{
 			printf(RED"Failed to create thread %zu\n"RST, i);
 			return (false);
 		}
-		i++;
 	}
-	i = 0;
-	while (i < nb_of_philo)
+	i = -1;
+	while (++i < nb_of_philo)
 	{
 		if (pthread_join(threads[i], NULL) != 0)
 		{
 			printf(RED"Failed to join thread %zu\n"RST, i);
 			return (false);
 		}
-		i++;
 	}
 	return (true);
 }
-
-
 
 bool	init_all(int argc, char **argv)
 {

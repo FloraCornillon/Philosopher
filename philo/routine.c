@@ -65,7 +65,7 @@ void	*supervisor_routine(void *arg)
 		}
 		if ((get_timestamp_ms() - philo->last_meal) > philo->table->time_to_die)
 		{
-			 print_msg(philo, "is dead");
+			print_msg(philo, "is dead");
     		philo->table->dead = true;
     		pthread_mutex_unlock(&philo->table->global);
     		break ;
