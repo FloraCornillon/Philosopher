@@ -20,24 +20,37 @@ void	print_msg(t_philo *philo, const char *msg)
 
 	pthread_mutex_lock(&philo->table->write_lock);
 	time = (get_timestamp_ms() - philo->table->start_simulation);
+	if (philo->table->dead)
+	{
+		pthread_mutex_unlock(&philo->table->write_lock);
+		return ;
+	}
 	printf("%zu %02zu %s\n", time, philo->id, msg);
 	pthread_mutex_unlock(&philo->table->write_lock);
 }
 
-void	ft_think(t_philo *philo)
+bool	ft_think(t_philo *philo)
 {
+	if (check_if_dead(philo))
+		return (false);
 	print_msg(philo, "is thinking");
+	return (true);
 }
 
 
-void	ft_sleep(t_philo *philo)
+bool	ft_sleep(t_philo *philo)
 {
+	if (check_if_dead(philo))
+		return (false);
 	print_msg(philo, "is sleeping");
 	ft_usleep(philo->table->time_to_sleep);
+	return (true);
 }
 
-void	ft_eat(t_philo *philo)
+bool	ft_eat(t_philo *philo)
 {
+	if (check_if_dead(philo))
+		return (false);
 	pthread_mutex_lock(philo->left_fork);
 	print_msg(philo, "has taken a fork");
 	pthread_mutex_lock(philo->right_fork);
@@ -49,6 +62,7 @@ void	ft_eat(t_philo *philo)
 	pthread_mutex_unlock(philo->right_fork);
 	if (philo->table->nb_of_time_to_eat != -2)
 		philo->nb_of_meal++;
+	return (true);
 }
 
 bool	is_dead(t_philo *philo)

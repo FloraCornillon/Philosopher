@@ -75,6 +75,8 @@ t_philo	*init_philo(t_table *table)
 		philo[i].left_fork = &table->forks[i];
 		philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
 		philo[i].table = table;
+		philo[i].last_meal = get_timestamp_ms();
+		philo[i].table->write_lock = table->write_lock;
 		i++;
 	}
 	return (philo);

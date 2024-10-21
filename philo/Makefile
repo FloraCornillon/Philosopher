@@ -1,7 +1,7 @@
 NAME = philo
 C = gcc
 FLAGS = -Wall -Wextra -Werror -pthread -O2
-SANITIZE = -fsanitize=thread
+# SANITIZE = -fsanitize=thread
 
 BIN = ./bin/
 

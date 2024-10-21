@@ -72,10 +72,11 @@ ssize_t	get_timestamp_ms(void);
 void	ft_usleep(size_t time);
 void	*supervisor_routine(void *arg);
 void	print_msg(t_philo *philo, const char *msg);
-void	ft_sleep(t_philo *philo);
-void	ft_think(t_philo *philo);
-void	ft_eat(t_philo *philo);
+bool	ft_sleep(t_philo *philo);
+bool	ft_think(t_philo *philo);
+bool	ft_eat(t_philo *philo);
 bool	is_dead(t_philo *philo);
+bool	check_if_dead(t_philo *philo);
 
 
 #endif
