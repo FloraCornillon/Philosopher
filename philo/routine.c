@@ -19,8 +19,11 @@ void	*philo_routine(void *ptr)
 	philo = (t_philo *)ptr;
 	if (philo->id % 2 == 0)
 		ft_usleep(1);
-	// if (philo->table->nb_of_philo == 1)
-	// 	fonction pour gerer un philo
+	if (philo->table->nb_of_philo == 1)
+	{
+		lonely_philo(philo);
+		return (ptr);
+	}
 	while (true)
 	{
 		if (check_if_dead(philo) || check_if_full(philo))
@@ -34,12 +37,10 @@ void	*philo_routine(void *ptr)
 
 bool	check_if_dead(t_philo *philo)
 {
-	bool	is_dead;
-
 	pthread_mutex_lock(&philo->table->global);
-	is_dead = philo->table->dead;
-	pthread_mutex_unlock(&philo->table->global);
-	return (is_dead);
+	if (philo->table->dead == true)
+		return (pthread_mutex_unlock(&philo->table->global), true);
+	return (pthread_mutex_unlock(&philo->table->global), false);
 }
 
 bool	check_if_full(t_philo *philo)
@@ -50,11 +51,11 @@ bool	check_if_full(t_philo *philo)
 	return (pthread_mutex_unlock(&philo->table->global), false);
 }
 
-
-
-
-		// printf(BLUE"%zu Philosopher %zu is thinking\n"RST, get_timestamp_ms(), philo->id);
-		// printf(GREEN"%zu Philosopher %zu is eating\n"RST, get_timestamp_ms(), philo->id);
-		// pthread_mutex_unlock(philo->right_fork);
-		// pthread_mutex_unlock(philo->left_fork);
-		// printf(MAG"%zu Philosopher %zu is sleeping\n"RST, get_timestamp_ms(), philo->id);
+void	lonely_philo(t_philo *philo)
+{
+	print_msg(philo, "is thinking", BLUE);
+	print_msg(philo, "has taken a fork", "");
+	print_msg(philo, "is dead", YELLOW);
+	// philo->table->dead = true;
+	// ft_usleep(philo->table->time_to_die);
+}
