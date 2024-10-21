@@ -60,8 +60,10 @@ bool	ft_eat(t_philo *philo)
 	ft_usleep(philo->table->time_to_eat);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_lock(&philo->table->global);
 	if (philo->table->nb_of_time_to_eat != -2)
 		philo->nb_of_meal++;
+	pthread_mutex_unlock(&philo->table->global);
 	return (true);
 }
 
