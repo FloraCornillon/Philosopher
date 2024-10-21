@@ -23,7 +23,7 @@ void	*philo_routine(void *ptr)
 	// 	fonction pour gerer un philo
 	while (true)
 	{
-		if (check_if_dead(philo))
+		if (check_if_dead(philo) || check_if_full(philo))
 			break ;
 		if (is_dead(philo) || !ft_think(philo) || !ft_eat(philo) || !ft_sleep(philo))
 			break ;
@@ -40,6 +40,14 @@ bool	check_if_dead(t_philo *philo)
 	is_dead = philo->table->dead;
 	pthread_mutex_unlock(&philo->table->global);
 	return (is_dead);
+}
+
+bool	check_if_full(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->table->global);
+	if (philo->nb_of_meal == philo->table->nb_of_time_to_eat)
+		return(pthread_mutex_unlock(&philo->table->global), true);
+	return (pthread_mutex_unlock(&philo->table->global), false);
 }
 
 

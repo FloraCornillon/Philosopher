@@ -77,6 +77,7 @@ bool	ft_think(t_philo *philo);
 bool	ft_eat(t_philo *philo);
 bool	is_dead(t_philo *philo);
 bool	check_if_dead(t_philo *philo);
+bool	check_if_full(t_philo *philo);
 
 
 #endif

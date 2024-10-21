@@ -31,7 +31,7 @@ void	print_msg(t_philo *philo, const char *msg)
 
 bool	ft_think(t_philo *philo)
 {
-	if (check_if_dead(philo))
+	if (check_if_dead(philo) || check_if_full(philo))
 		return (false);
 	print_msg(philo, "is thinking");
 	return (true);
@@ -40,7 +40,7 @@ bool	ft_think(t_philo *philo)
 
 bool	ft_sleep(t_philo *philo)
 {
-	if (check_if_dead(philo))
+	if (check_if_dead(philo) || check_if_full(philo))
 		return (false);
 	print_msg(philo, "is sleeping");
 	ft_usleep(philo->table->time_to_sleep);
@@ -49,7 +49,7 @@ bool	ft_sleep(t_philo *philo)
 
 bool	ft_eat(t_philo *philo)
 {
-	if (check_if_dead(philo))
+	if (check_if_dead(philo) || check_if_full(philo))
 		return (false);
 	pthread_mutex_lock(philo->left_fork);
 	print_msg(philo, "has taken a fork");
