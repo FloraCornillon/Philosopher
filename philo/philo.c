@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:20:13 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/17 19:50:53 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/22 16:28:54 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ bool	ft_sleep(t_philo *philo)
 
 bool	ft_eat(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->table->global);
+	philo->last_meal = get_timestamp_ms();
+	pthread_mutex_unlock(&philo->table->global);
 	if (check_if_dead(philo) || check_if_full(philo))
 		return (false);
 	pthread_mutex_lock(philo->left_fork);
@@ -56,7 +59,6 @@ bool	ft_eat(t_philo *philo)
 	pthread_mutex_lock(philo->right_fork);
 	print_msg(philo, "has taken a fork", "");
 	print_msg(philo, "is eating", GREEN);
-	philo->last_meal = get_timestamp_ms();
 	ft_usleep(philo->table->time_to_eat);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);

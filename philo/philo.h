@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:44 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/17 19:12:07 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/22 15:59:42 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_philo
 	ssize_t	last_meal;
 	pthread_mutex_t *left_fork;
 	pthread_mutex_t *right_fork;
-	pthread_t	supervisor;
 	t_table	*table;
 }	t_philo;
 

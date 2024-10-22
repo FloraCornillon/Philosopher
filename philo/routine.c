@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:00:38 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/17 19:40:22 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/22 16:28:37 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	lonely_philo(t_philo *philo)
 {
 	print_msg(philo, "is thinking", BLUE);
 	print_msg(philo, "has taken a fork", "");
+	ft_usleep(philo->table->time_to_die);
 	print_msg(philo, "is dead", YELLOW);
 	// philo->table->dead = true;
-	// ft_usleep(philo->table->time_to_die);
 }

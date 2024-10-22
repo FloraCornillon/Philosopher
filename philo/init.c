@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:44:15 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/17 19:45:56 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/22 16:30:21 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,16 @@ t_philo	*init_philo(t_table *table)
 	while (i < table->nb_of_philo)
 	{
 		philo[i].id = i + 1;
+		// if (i % 2 == 0)
+		// {
+		// 	philo[i].left_fork = &table->forks[i];
+		// 	philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
+		// }
+		// else
+		// {
+		// 	philo[i].right_fork = &table->forks[i];
+		// 	philo[i].left_fork = &table->forks[(i + 1) % table->nb_of_philo];
+		// }
 		philo[i].left_fork = &table->forks[i];
 		philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
 		philo[i].table = table;
