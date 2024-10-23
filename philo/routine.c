@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:00:38 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/23 12:05:24 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/23 14:10:57 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ void	*philo_routine(void *ptr)
 		lonely_philo(philo);
 		return (ptr);
 	}
-	while (true)
+	while (!is_dead(philo) || !check_if_full(philo))
 	{
-		if (is_dead(philo) || check_if_full(philo))
+		if (!ft_eat(philo))
 			break ;
-		if (!ft_eat(philo) || !ft_sleep(philo) || !ft_think(philo))
+		if (!ft_sleep(philo))
+			break ;
+		if (!ft_think(philo))
 			break ;
 	}
 	return (ptr);
@@ -37,6 +39,8 @@ void	*philo_routine(void *ptr)
 bool	check_if_full(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->table->global);
+	if (philo->table->dead)
+		return (pthread_mutex_unlock(&philo->table->global), true);
 	if (philo->nb_of_meal == philo->table->nb_of_time_to_eat)
 		return(pthread_mutex_unlock(&philo->table->global), true);
 	return (pthread_mutex_unlock(&philo->table->global), false);
@@ -48,5 +52,4 @@ void	lonely_philo(t_philo *philo)
 	print_msg(philo, "has taken a fork", "");
 	ft_usleep(philo->table->time_to_die);
 	print_msg(philo, "is dead", YELLOW);
-	// philo->table->dead = true;
 }
