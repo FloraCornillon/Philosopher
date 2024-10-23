@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:00:38 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/23 14:10:57 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/23 16:45:19 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ void	*philo_routine(void *ptr)
 		lonely_philo(philo);
 		return (ptr);
 	}
-	while (!is_dead(philo) || !check_if_full(philo))
+	while (!is_dead(philo) && !check_if_full(philo))
 	{
 		if (!ft_eat(philo))
 			break ;
 		if (!ft_sleep(philo))
+			break ;
+		if (is_dead(philo) || check_if_full(philo))
 			break ;
 		if (!ft_think(philo))
 			break ;

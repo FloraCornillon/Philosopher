@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:44:15 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/23 11:43:53 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/23 16:43:07 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ bool	init_mutexes(t_table *table)
 		return (false);
 	if (pthread_mutex_init(&table->dead_lock, NULL) != 0)
 		return (false);
+	// if (pthread_mutex_init(&table->check_dead, NULL) != 0)
+	// 	return (false);
 	return (true);
 }
 

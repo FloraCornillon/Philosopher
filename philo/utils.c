@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 17:17:04 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/23 12:14:50 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/23 16:44:52 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,21 @@ void	ft_usleep(size_t time)
 	start = get_timestamp_ms();
 	while (get_timestamp_ms() - start < time)
 		usleep(500);
+}
+
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s1 || !s2)
+		return (0);
+	while (i < n && (s1[i] || s2[i]))
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		else
+			i++;
+	}
+	return (0);
 }

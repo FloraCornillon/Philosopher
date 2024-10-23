@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:20:13 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/23 14:30:47 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/23 16:56:47 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,14 @@
 void	print_msg(t_philo *philo, const char *msg, const char *color)
 {
 	size_t	time;
+	static bool	print = true;
 
 	pthread_mutex_lock(&philo->table->write_lock);
 	time = (get_timestamp_ms() - philo->table->start_simulation);
-	printf("%s%zu %02zu %s%s\n", color, time, philo->id, msg, RST);
+	if (print)
+		printf("%s%zu %02zu %s%s\n", color, time, philo->id, msg, RST);
+	if (!ft_strncmp(msg, "died", 4))
+		print = false;
 	pthread_mutex_unlock(&philo->table->write_lock);
 }
 
