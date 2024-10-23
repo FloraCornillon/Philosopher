@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:44 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/22 15:59:42 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/23 11:42:57 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_table
 	pthread_mutex_t	*forks;
 	pthread_mutex_t global;
 	pthread_mutex_t write_lock;
+	pthread_mutex_t dead_lock;
 	bool	dead;
 }	t_table;
 

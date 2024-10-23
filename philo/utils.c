@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 17:17:04 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/22 15:59:29 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:14:50 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	destroy_mutexes(t_table *table)
 	}
 	pthread_mutex_destroy(&table->global);
 	pthread_mutex_destroy(&table->write_lock);
+	pthread_mutex_destroy(&table->dead_lock);
 	free(table->forks);
 }
 

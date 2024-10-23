@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:00:38 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/22 16:28:37 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:05:24 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,12 @@ void	*philo_routine(void *ptr)
 	}
 	while (true)
 	{
-		if (check_if_dead(philo) || check_if_full(philo))
+		if (is_dead(philo) || check_if_full(philo))
 			break ;
-		if (is_dead(philo) || !ft_think(philo) || !ft_eat(philo) || !ft_sleep(philo))
+		if (!ft_eat(philo) || !ft_sleep(philo) || !ft_think(philo))
 			break ;
 	}
 	return (ptr);
-}
-
-
-bool	check_if_dead(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->table->global);
-	if (philo->table->dead == true)
-		return (pthread_mutex_unlock(&philo->table->global), true);
-	return (pthread_mutex_unlock(&philo->table->global), false);
 }
 
 bool	check_if_full(t_philo *philo)

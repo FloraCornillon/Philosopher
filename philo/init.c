@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:44:15 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/22 16:30:21 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/23 11:43:53 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ bool	init_mutexes(t_table *table)
 		return (false);
 	if (pthread_mutex_init(&table->write_lock, NULL) != 0)
 		return (false);
+	if (pthread_mutex_init(&table->dead_lock, NULL) != 0)
+		return (false);
 	return (true);
 }
 
@@ -72,18 +74,18 @@ t_philo	*init_philo(t_table *table)
 	while (i < table->nb_of_philo)
 	{
 		philo[i].id = i + 1;
-		// if (i % 2 == 0)
-		// {
-		// 	philo[i].left_fork = &table->forks[i];
-		// 	philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
-		// }
-		// else
-		// {
-		// 	philo[i].right_fork = &table->forks[i];
-		// 	philo[i].left_fork = &table->forks[(i + 1) % table->nb_of_philo];
-		// }
-		philo[i].left_fork = &table->forks[i];
-		philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
+		if (i % 2 == 0)
+		{
+			philo[i].left_fork = &table->forks[i];
+			philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
+		}
+		else
+		{
+			philo[i].right_fork = &table->forks[i];
+			philo[i].left_fork = &table->forks[(i + 1) % table->nb_of_philo];
+		}
+		// philo[i].left_fork = &table->forks[i];
+		// philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
 		philo[i].table = table;
 		philo[i].last_meal = get_timestamp_ms();
 		i++;
