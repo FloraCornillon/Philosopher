@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 17:17:04 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/23 16:44:52 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/24 14:23:19 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,18 @@ ssize_t	get_timestamp_ms(void)
 	return (now.tv_sec * 1000 + now.tv_usec / 1000);
 }
 
-void	ft_usleep(size_t time)
+bool	ft_usleep(size_t time, t_philo *philo)
 {
 	size_t	start;
 
 	start = get_timestamp_ms();
 	while (get_timestamp_ms() - start < time)
+	{
+		if (is_dead(philo))
+			return (false);
 		usleep(500);
+	}
+	return (true);
 }
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)

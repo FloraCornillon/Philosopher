@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:00:38 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/23 16:45:19 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/24 14:42:20 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,18 @@ void	*philo_routine(void *ptr)
 
 	philo = (t_philo *)ptr;
 	if (philo->id % 2 == 0)
-		ft_usleep(1);
+		usleep(100);
 	if (philo->table->nb_of_philo == 1)
 	{
 		lonely_philo(philo);
 		return (ptr);
 	}
-	while (!is_dead(philo) && !check_if_full(philo))
+	// while (!is_dead(philo) && !check_if_full(philo))
+	while (true)
 	{
 		if (!ft_eat(philo))
 			break ;
 		if (!ft_sleep(philo))
-			break ;
-		if (is_dead(philo) || check_if_full(philo))
 			break ;
 		if (!ft_think(philo))
 			break ;
@@ -52,6 +51,6 @@ void	lonely_philo(t_philo *philo)
 {
 	print_msg(philo, "is thinking", BLUE);
 	print_msg(philo, "has taken a fork", "");
-	ft_usleep(philo->table->time_to_die);
+	ft_usleep(philo->table->time_to_die, philo);
 	print_msg(philo, "is dead", YELLOW);
 }

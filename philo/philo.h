@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:44 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/23 16:44:21 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/24 14:24:39 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ typedef struct s_philo
 	ssize_t	last_meal;
 	pthread_mutex_t *left_fork;
 	pthread_mutex_t *right_fork;
-	bool is_eating;
 	t_table	*table;
 }	t_philo;
 
@@ -75,7 +74,7 @@ bool	init_all(int argc, char **argv);
 int		error_handle(const char *str, int ret);
 void	destroy_mutexes(t_table *table);
 ssize_t	get_timestamp_ms();
-void	ft_usleep(size_t time);
+bool	ft_usleep(size_t time, t_philo *philo);
 void	print_msg(t_philo *philo, const char *msg, const char *color);
 bool	ft_sleep(t_philo *philo);
 bool	ft_think(t_philo *philo);
