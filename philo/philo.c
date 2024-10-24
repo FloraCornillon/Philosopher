@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:20:13 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/24 14:54:16 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:48:26 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ bool	ft_eat(t_philo *philo)
 		ret = false;
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-	if (check_if_full(philo))
-		return (false);
 	return (ret);
 }
 

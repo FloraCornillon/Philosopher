@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:00:38 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/24 14:42:20 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:32:37 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,13 @@ void	*philo_routine(void *ptr)
 
 	philo = (t_philo *)ptr;
 	if (philo->id % 2 == 0)
-		usleep(100);
+		usleep(500);
 	if (philo->table->nb_of_philo == 1)
 	{
 		lonely_philo(philo);
 		return (ptr);
 	}
-	// while (!is_dead(philo) && !check_if_full(philo))
-	while (true)
+	while (philo->table->nb_of_time_to_eat != philo->nb_of_meal)
 	{
 		if (!ft_eat(philo))
 			break ;
