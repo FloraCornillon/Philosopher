@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:20:13 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/24 15:48:26 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/28 16:47:49 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,9 @@ void	print_msg(t_philo *philo, const char *msg, const char *color)
 
 bool	ft_think(t_philo *philo)
 {
-	print_msg(philo, "is thinking", BLUE);
-	if (philo->table->nb_of_philo % 2 != 0)
-	{
-		if (!ft_usleep(philo->table->time_to_eat / 2, philo)) //peut etr mutex ici
-			return (false);
-	}
-	else if (is_dead(philo))
+	if (is_dead(philo))
 		return (false);
+	print_msg(philo, "is thinking", BLUE);
 	return (true);
 }
 
