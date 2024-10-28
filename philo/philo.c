@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:20:13 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/24 15:48:26 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/28 13:57:38 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,14 @@ void	print_msg(t_philo *philo, const char *msg, const char *color)
 bool	ft_think(t_philo *philo)
 {
 	print_msg(philo, "is thinking", BLUE);
-	if (philo->table->nb_of_philo % 2 != 0)
-	{
-		if (!ft_usleep(philo->table->time_to_eat / 2, philo)) //peut etr mutex ici
-			return (false);
-	}
-	else if (is_dead(philo))
-		return (false);
+	usleep(150);
+	// if (philo->table->nb_of_philo % 2 != 0)
+	// {
+	// 	if (!ft_usleep(philo->table->time_to_eat / 2, philo)) //peut etr mutex ici
+	// 		return (false);
+	// }
+	// if (is_dead(philo))
+	// 	return (false);
 	return (true);
 }
 
@@ -55,20 +56,27 @@ bool	ft_eat(t_philo *philo)
 	bool	ret;
 
 	ret = true;
-	pthread_mutex_lock(philo->left_fork);
+	pthread_mutex_lock(&philo->table->global);
+	if (!philo->left_fork->available && !philo->right_fork->available)
+			return (pthread_mutex_unlock(&philo->table->global), true);
+	philo->left_fork->available = false;
+	philo->right_fork->available = false;
+	pthread_mutex_unlock(&philo->table->global);
+	pthread_mutex_lock(&philo->left_fork->fork);
 	print_msg(philo, "has taken a fork", "");
-	pthread_mutex_lock(philo->right_fork);
+	pthread_mutex_lock(&philo->right_fork->fork);
 	print_msg(philo, "has taken a fork", "");
 	print_msg(philo, "is eating", GREEN);
 	philo->last_meal = get_timestamp_ms();
-	pthread_mutex_lock(&philo->table->global);
 	if (philo->table->nb_of_time_to_eat != -2)
 		philo->nb_of_meal++;
 	pthread_mutex_unlock(&philo->table->global);
 	if (!ft_usleep(philo->table->time_to_eat, philo))
 		ret = false;
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(&philo->left_fork->fork);
+	philo->left_fork->available = true;
+	pthread_mutex_unlock(&philo->right_fork->fork);
+	philo->right_fork->available = true;
 	return (ret);
 }
 

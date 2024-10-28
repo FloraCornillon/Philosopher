@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 17:17:04 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/24 14:23:19 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/28 13:33:21 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	destroy_mutexes(t_table *table)
 	i = 0;
 	while (i < table->nb_of_philo)
 	{
-		pthread_mutex_destroy(&table->forks[i]);
+		pthread_mutex_destroy(&table->forks[i].fork);
 		i++;
 	}
 	pthread_mutex_destroy(&table->global);

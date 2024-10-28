@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:44 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/24 14:24:39 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/28 13:00:52 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@
 #define THINK BLUE
 #define DEAD YELLOW
 
+typedef struct s_fork
+{
+	bool	available;
+	pthread_mutex_t	fork;
+}	t_fork;
+
 typedef struct s_table
 {
 	ssize_t	nb_of_philo;
@@ -42,7 +48,7 @@ typedef struct s_table
 	ssize_t	time_to_sleep;
 	ssize_t	start_simulation;
 	ssize_t	nb_of_time_to_eat;
-	pthread_mutex_t	*forks;
+	t_fork	*forks;
 	pthread_mutex_t global;
 	pthread_mutex_t write_lock;
 	pthread_mutex_t dead_lock;
@@ -54,11 +60,10 @@ typedef struct s_philo
 	size_t	id;
 	ssize_t	nb_of_meal;
 	ssize_t	last_meal;
-	pthread_mutex_t *left_fork;
-	pthread_mutex_t *right_fork;
+	t_fork *left_fork;
+	t_fork *right_fork;
 	t_table	*table;
 }	t_philo;
-
 
 
 bool	is_positive_num(const char *str);
