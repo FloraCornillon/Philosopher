@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:44 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/28 13:00:52 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/28 17:06:24 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,11 @@ typedef struct s_philo
 	ssize_t	last_meal;
 	t_fork *left_fork;
 	t_fork *right_fork;
+	ssize_t	nb_of_philo;
+	ssize_t	time_to_die;
+	ssize_t	time_to_eat;
+	ssize_t	time_to_sleep;
+	ssize_t	nb_of_time_to_eat;
 	t_table	*table;
 }	t_philo;
 

@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:00:38 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/28 16:51:19 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/28 17:16:35 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	*philo_routine(void *ptr)
 	philo = (t_philo *)ptr;
 	if (philo->id % 2 == 0)
 		usleep(500);
-	if (philo->table->nb_of_philo == 1)
+	if (philo->nb_of_philo == 1)
 		return (lonely_philo(philo), ptr);
-	while (philo->table->nb_of_time_to_eat != philo->nb_of_meal)
+	while (philo->nb_of_time_to_eat != philo->nb_of_meal)
 	{
 		if (!ft_eat(philo))
 			break ;
@@ -33,15 +33,6 @@ void	*philo_routine(void *ptr)
 	return (ptr);
 }
 
-bool	check_if_full(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->table->global);
-	if (philo->table->dead)
-		return (pthread_mutex_unlock(&philo->table->global), true);
-	if (philo->nb_of_meal == philo->table->nb_of_time_to_eat)
-		return(pthread_mutex_unlock(&philo->table->global), true);
-	return (pthread_mutex_unlock(&philo->table->global), false);
-}
 
 void	lonely_philo(t_philo *philo)
 {

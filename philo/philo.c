@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:20:13 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/28 16:50:49 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/28 17:37:39 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,18 @@ void	print_msg(t_philo *philo, const char *msg, const char *color)
 	pthread_mutex_unlock(&philo->table->write_lock);
 }
 
+
 bool	ft_think(t_philo *philo)
 {
 	if (is_dead(philo))
 		return (false);
 	print_msg(philo, "is thinking", BLUE);
+	while (fork_loop(philo))
+	{
+		usleep(100);
+		if (is_dead(philo))
+			return (false);
+	}
 	return (true);
 }
 
@@ -40,7 +47,7 @@ bool	ft_think(t_philo *philo)
 bool	ft_sleep(t_philo *philo)
 {
 	print_msg(philo, "is sleeping", MAG);
-	if (!ft_usleep(philo->table->time_to_sleep, philo))
+	if (!ft_usleep(philo->time_to_sleep, philo))
 		return (false);
 	return (true);
 }
@@ -50,22 +57,16 @@ bool	ft_eat(t_philo *philo)
 	bool	ret;
 
 	ret = true;
-	pthread_mutex_lock(&philo->table->global);
-	if (!philo->left_fork->available && !philo->right_fork->available)
-			return (pthread_mutex_unlock(&philo->table->global), true);
-	philo->left_fork->available = false;
-	philo->right_fork->available = false;
-	pthread_mutex_unlock(&philo->table->global);
 	pthread_mutex_lock(&philo->left_fork->fork);
 	print_msg(philo, "has taken a fork", "");
 	pthread_mutex_lock(&philo->right_fork->fork);
 	print_msg(philo, "has taken a fork", "");
 	print_msg(philo, "is eating", GREEN);
 	philo->last_meal = get_timestamp_ms();
-	if (philo->table->nb_of_time_to_eat != -2)
+	if (philo->nb_of_time_to_eat != -2)
 		philo->nb_of_meal++;
-	pthread_mutex_unlock(&philo->table->global);
-	if (!ft_usleep(philo->table->time_to_eat, philo))
+	// pthread_mutex_unlock(&philo->table->global);
+	if (!ft_usleep(philo->time_to_eat, philo))
 		ret = false;
 	pthread_mutex_unlock(&philo->left_fork->fork);
 	philo->left_fork->available = true;
@@ -76,17 +77,20 @@ bool	ft_eat(t_philo *philo)
 
 bool	is_dead(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->table->global);
+	pthread_mutex_lock(&philo->table->dead_lock);
 	if (philo->table->dead)
-		return (pthread_mutex_unlock(&philo->table->global), true);
-	if (((get_timestamp_ms() - philo->last_meal) > philo->table->time_to_die))
+	{
+		pthread_mutex_unlock(&philo->table->dead_lock);
+		return true;
+	}
+	if ((get_timestamp_ms() - philo->last_meal) > philo->time_to_die)
 	{
 		print_msg(philo, "died", YELLOW);
 		philo->table->dead = true;
-		return (pthread_mutex_unlock(&philo->table->global), true);
+		pthread_mutex_unlock(&philo->table->dead_lock);
+		return true;
 	}
-	if (philo->table->dead)
-		return (pthread_mutex_unlock(&philo->table->global), true);
-	return (pthread_mutex_unlock(&philo->table->global), false);
+	pthread_mutex_unlock(&philo->table->dead_lock);
+	return false;
 }
 

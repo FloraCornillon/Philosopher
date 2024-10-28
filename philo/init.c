@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:44:15 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/28 13:05:43 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/28 17:31:24 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,20 +75,25 @@ t_philo	*init_philo(t_table *table)
 	while (i < table->nb_of_philo)
 	{
 		philo[i].id = i + 1;
-		if (i % 2 == 0)
-		{
-			philo[i].left_fork = &table->forks[i];
-			philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
-		}
-		else
-		{
-			philo[i].right_fork = &table->forks[i];
-			philo[i].left_fork = &table->forks[(i + 1) % table->nb_of_philo];
-		}
+		// if (i % 2 == 0)
+		// {
+		// 	philo[i].left_fork = &table->forks[i];
+		// 	philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
+		// }
+		// else
+		// {
+		// 	philo[i].right_fork = &table->forks[i];
+		// 	philo[i].left_fork = &table->forks[(i + 1) % table->nb_of_philo];
+		// }
 		philo[i].left_fork = &table->forks[i];
 		philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
 		philo[i].table = table;
 		philo[i].last_meal = get_timestamp_ms();
+		philo[i].nb_of_philo = table->nb_of_philo;
+		philo[i].time_to_die = table->time_to_die;
+		philo[i].time_to_eat = table->time_to_eat;
+		philo[i].time_to_sleep = table->time_to_sleep;
+		philo[i].nb_of_time_to_eat = table->nb_of_time_to_eat;
 		i++;
 	}
 	return (philo);
