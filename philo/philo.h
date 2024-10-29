@@ -62,7 +62,6 @@ typedef struct s_philo
 	ssize_t	time_to_eat;
 	ssize_t	time_to_sleep;
 	ssize_t	nb_of_time_to_eat;
-	ssize_t waiting_fork;
 	t_table	*table;
 }	t_philo;
 
@@ -74,7 +73,7 @@ ssize_t	ft_atosst(const char *str, size_t i);
 bool	init_table(int argc, char **argv, t_table *table);
 void	*philo_routine(void *arg);
 t_philo	*init_philo(t_table *table);
-bool 	init_thread(ssize_t nb_of_philo, t_philo *philo);
+bool 	init_thread(ssize_t nb_of_philo, t_philo *philo, t_table *table);
 bool	init_mutexes(t_table *table);
 bool	init_all(int argc, char **argv);
 int		error_handle(const char *str, int ret);
@@ -88,6 +87,8 @@ bool	ft_eat(t_philo *philo);
 bool	is_dead(t_philo *philo);
 void	lonely_philo(t_philo *philo);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+void *death_checker(void *ptr);
+void *philo_routine(void *ptr);
 
 
 #endif

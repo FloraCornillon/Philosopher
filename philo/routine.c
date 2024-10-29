@@ -12,13 +12,22 @@
 
 #include "philo.h"
 
+void    *death_routine(void *ptr)
+{
+    t_table *table;
+	ssize_t	i;
+
+    table = (t_table *)ptr;
+
+}
+
 void	*philo_routine(void *ptr)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)ptr;
 	if (philo->id % 2 == 0)
-		usleep(1000);
+		ft_usleep(1, philo);
 	if (philo->nb_of_philo == 1)
 		return (lonely_philo(philo), ptr);
 	while (philo->nb_of_time_to_eat != philo->nb_of_meal)
@@ -32,6 +41,7 @@ void	*philo_routine(void *ptr)
 	}
 	return (ptr);
 }
+
 
 void	lonely_philo(t_philo *philo)
 {

@@ -98,12 +98,30 @@ t_philo	*init_philo(t_table *table)
 	return (philo);
 }
 
-bool 	init_thread(ssize_t nb_of_philo, t_philo *philo)
+bool	init_death(t_table *table)
+{
+	pthread_t	death_thread;
+	if (pthread_create(&death_thread, NULL, death_routine, table) != 0)
+	{
+		printf(RED"Failed to create death thread\n"RST);
+		return (false);
+	}
+	// if (pthread_join(death_thread, NULL) != 0)
+	// {
+	// 	printf(RED"Failed to join death thread\n"RST);
+	// 	return (false);
+	// }
+	return (true);
+}
+
+bool 	init_thread(ssize_t nb_of_philo, t_philo *philo, t_table *table)
 {
 	pthread_t	threads[nb_of_philo];
 	ssize_t	i;
 
 	i = -1;
+	if (init_death(table))
+		return (false);
 	while (++i < nb_of_philo)
 	{
 		if (pthread_create(&threads[i], NULL, philo_routine, &philo[i]) != 0)

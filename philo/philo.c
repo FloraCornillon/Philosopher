@@ -32,16 +32,16 @@ void	print_msg(t_philo *philo, const char *msg, const char *color)
 bool	ft_think(t_philo *philo)
 {
 	print_msg(philo, "is thinking", BLUE);
-	if (is_dead(philo))
-		return (false);
+	// if (is_dead(philo))
+	// 	return (false);
 	return (true);
 }
 
 
 bool	ft_sleep(t_philo *philo)
 {
-	if (is_dead(philo))
-		return (false);
+	// if (is_dead(philo))
+	// 	return (false);
 	print_msg(philo, "is sleeping", MAG);
 	ft_usleep(philo->time_to_sleep, philo);
 	return (true);
@@ -60,12 +60,12 @@ bool	ft_eat(t_philo *philo)
 		philo->nb_of_meal++;
 	// pthread_mutex_unlock(&philo->table->global);
 	ft_usleep(philo->time_to_eat, philo);
-	if (is_dead(philo))
-	{
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		return (false);
-	}
+	// if (is_dead(philo))
+	// {
+	// 	pthread_mutex_unlock(philo->left_fork);
+	// 	pthread_mutex_unlock(philo->right_fork);
+	// 	return (false);
+	// }
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 	return (true);
