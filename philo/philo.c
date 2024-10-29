@@ -31,9 +31,9 @@ void	print_msg(t_philo *philo, const char *msg, const char *color)
 
 bool	ft_think(t_philo *philo)
 {
+	print_msg(philo, "is thinking", BLUE);
 	if (is_dead(philo))
 		return (false);
-	print_msg(philo, "is thinking", BLUE);
 	return (true);
 }
 
@@ -53,18 +53,24 @@ bool	ft_eat(t_philo *philo)
 	print_msg(philo, "has taken a fork", "");
 	pthread_mutex_lock(philo->right_fork);
 	print_msg(philo, "has taken a fork", "");
-	print_msg(philo, "has taken a fork", "");
 	print_msg(philo, "is eating", GREEN);
-	pthread_mutex_lock(&philo->table->global);		
+	// pthread_mutex_lock(&philo->table->global);
 	philo->last_meal = get_timestamp_ms();
 	if (philo->nb_of_time_to_eat != -2)
 		philo->nb_of_meal++;
-	pthread_mutex_unlock(&philo->table->global);
+	// pthread_mutex_unlock(&philo->table->global);
 	ft_usleep(philo->time_to_eat, philo);
+	if (is_dead(philo))
+	{
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
+		return (false);
+	}
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 	return (true);
 }
+
 
 bool	is_dead(t_philo *philo)
 {
@@ -77,9 +83,9 @@ bool	is_dead(t_philo *philo)
 	if ((get_timestamp_ms() - philo->last_meal) >= philo->time_to_die)
 	{
 		print_msg(philo, "died", YELLOW);
-		philo->table->dead = true;
-		pthread_mutex_unlock(&philo->table->dead_lock);
-		return true;
+	 	philo->table->dead = true;
+	 	pthread_mutex_unlock(&philo->table->dead_lock);
+	 	return true;
 	}
 	pthread_mutex_unlock(&philo->table->dead_lock);
 	return false;

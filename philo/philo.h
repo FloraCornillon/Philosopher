@@ -53,15 +53,16 @@ typedef struct s_table
 typedef struct s_philo
 {
 	size_t	id;
-	ssize_t	nb_of_meal;
-	ssize_t	last_meal;
 	pthread_mutex_t *left_fork;
 	pthread_mutex_t *right_fork;
+	ssize_t	nb_of_meal;
+	ssize_t	last_meal;
 	ssize_t	nb_of_philo;
 	ssize_t	time_to_die;
 	ssize_t	time_to_eat;
 	ssize_t	time_to_sleep;
 	ssize_t	nb_of_time_to_eat;
+	ssize_t waiting_fork;
 	t_table	*table;
 }	t_philo;
 
