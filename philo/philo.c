@@ -41,31 +41,26 @@ bool	ft_think(t_philo *philo)
 bool	ft_sleep(t_philo *philo)
 {
 	print_msg(philo, "is sleeping", MAG);
-	if (!ft_usleep(philo->time_to_sleep, philo))
-		return (false);
+	ft_usleep(philo->time_to_sleep, philo);
 	return (true);
 }
 
 bool	ft_eat(t_philo *philo)
 {
-	bool	ret;
-
-	ret = true;
-	// pthread_mutex_lock(&philo->left_fork->fork);
-	// print_msg(philo, "has taken a fork", "");
-	// pthread_mutex_lock(&philo->right_fork->fork);
-	// print_msg(philo, "has taken a fork", "");
+	pthread_mutex_lock(&philo->left_fork);
+	print_msg(philo, "has taken a fork", "");
+	pthread_mutex_lock(&philo->right_fork);
+	print_msg(philo, "has taken a fork", "");
 	print_msg(philo, "is eating", GREEN);
 	pthread_mutex_lock(&philo->table->global);
 	philo->last_meal = get_timestamp_ms();
 	if (philo->nb_of_time_to_eat != -2)
 		philo->nb_of_meal++;
 	pthread_mutex_unlock(&philo->table->global);
-	if (!ft_usleep(philo->time_to_eat, philo))
-		ret = false;
+	ft_usleep(philo->time_to_eat, philo);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-	return (ret);
+	return (true);
 }
 
 bool	is_dead(t_philo *philo)
