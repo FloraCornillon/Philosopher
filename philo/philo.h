@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:44 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/28 17:06:24 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/29 17:32:53 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,34 @@
 #include <sys/time.h>
 #include <pthread.h>
 
-#define RST	   "\033[0m"
-#define RED	   "\033[1;31m"
-#define GREEN  "\033[1;32m"
-#define YELLOW "\033[1;33m"
-#define BLUE   "\033[1;34m"
-#define MAG    "\033[1;35m"
+#define COLORS 0
+
+# if (COLORS)
+#  define RST	   "\033[0m"
+#  define RED	   "\033[1;31m"
+#  define GREEN  "\033[1;32m"
+#  define YELLOW "\033[1;33m"
+#  define BLUE   "\033[1;34m"
+#  define MAG    "\033[1;35m"
+# else
+#  define RST	   ""
+#  define RED	""
+#  define GREEN  ""
+#  define YELLOW ""
+#  define BLUE   ""
+#  define MAG    ""
+# endif
 
 #define EAT GREEN
 #define SLEEP MAG
 #define THINK BLUE
 #define DEAD YELLOW
 
+typedef struct s_fork
+{
+	bool	available;
+	pthread_mutex_t	mutex;
+}	t_fork;
 
 typedef struct s_table
 {
@@ -43,7 +59,8 @@ typedef struct s_table
 	ssize_t	time_to_sleep;
 	ssize_t	start_simulation;
 	ssize_t	nb_of_time_to_eat;
-	pthread_mutex_t	*forks;
+	ssize_t	think_time;
+	t_fork	*forks;
 	pthread_mutex_t global;
 	pthread_mutex_t write_lock;
 	pthread_mutex_t dead_lock;
@@ -53,8 +70,8 @@ typedef struct s_table
 typedef struct s_philo
 {
 	size_t	id;
-	pthread_mutex_t *left_fork;
-	pthread_mutex_t *right_fork;
+	t_fork *left_fork;
+	t_fork *right_fork;
 	ssize_t	nb_of_meal;
 	ssize_t	last_meal;
 	ssize_t	nb_of_philo;
@@ -62,6 +79,9 @@ typedef struct s_philo
 	ssize_t	time_to_eat;
 	ssize_t	time_to_sleep;
 	ssize_t	nb_of_time_to_eat;
+	ssize_t	think_time;
+	ssize_t	start_waiting;
+	ssize_t	wating_fork;
 	t_table	*table;
 }	t_philo;
 
@@ -87,8 +107,9 @@ bool	ft_eat(t_philo *philo);
 bool	is_dead(t_philo *philo);
 void	lonely_philo(t_philo *philo);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
-void *death_checker(void *ptr);
-void *philo_routine(void *ptr);
+void	*philo_routine(void *ptr);
+ssize_t	get_think_tm(t_table *table);
+bool	take_fork(t_philo *philo);
 
 
 #endif

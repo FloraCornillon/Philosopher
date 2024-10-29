@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 17:17:04 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/28 13:33:21 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/29 17:32:20 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	destroy_mutexes(t_table *table)
 	i = 0;
 	while (i < table->nb_of_philo)
 	{
-		pthread_mutex_destroy(&table->forks[i]);
+		pthread_mutex_destroy(&table->forks[i].mutex);
 		i++;
 	}
 	pthread_mutex_destroy(&table->global);
@@ -61,12 +61,18 @@ bool	ft_usleep(size_t time, t_philo *philo)
 	start = get_timestamp_ms();
 	(void)philo;
 	while (get_timestamp_ms() - start < time)
-	{
-		// if (is_dead(philo))
-		// 	return (false);
 		usleep(500);
-	}
 	return (true);
+}
+
+ssize_t	get_think_tm(t_table *table)
+{
+	ssize_t	think_time;
+
+	think_time = 3 * table->time_to_eat / 2;
+	if (table->nb_of_philo % 2 == 0 || think_time <= table->time_to_sleep)
+		return (0);
+	return (think_time - table->time_to_sleep);
 }
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)

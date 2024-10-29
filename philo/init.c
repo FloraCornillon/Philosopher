@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:44:15 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/28 17:31:24 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/29 17:30:19 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ bool	init_table(int argc, char **argv, t_table *table)
 	table->time_to_eat = ft_atosst(argv[3], 3);
 	table->time_to_sleep = ft_atosst(argv[4], 4);
 	table->start_simulation = get_timestamp_ms();
+	table->think_time = get_think_tm(table);
 	table->dead = false;
 	if (argc == 6)
 		table->nb_of_time_to_eat = ft_atosst(argv[5], 5);
@@ -38,13 +39,14 @@ bool	init_mutexes(t_table *table)
 	ssize_t	i;
 
 	i = 0;
-	table->forks = malloc(sizeof(pthread_mutex_t) * table->nb_of_philo);
+	table->forks = malloc(sizeof(t_fork) * table->nb_of_philo);
 	if (!table->forks)
 		return (false);
-	memset(table->forks, 0, sizeof(pthread_mutex_t) * table->nb_of_philo);
+	memset(table->forks, 0, sizeof(t_fork) * table->nb_of_philo);
 	while (i < table->nb_of_philo)
 	{
-		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
+		table->forks[i].available = true;
+		if (pthread_mutex_init(&table->forks[i].mutex, NULL) != 0)
 		{
 			printf(RED"Failed to init mutex %zu\n"RST, i);
 			return (false);
@@ -84,34 +86,16 @@ t_philo	*init_philo(t_table *table)
 			philo[i].right_fork = &table->forks[i];
 			philo[i].left_fork = &table->forks[(i + 1) % table->nb_of_philo];
 		}
-		// philo[i].left_fork = &table->forks[i];
-		// philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
 		philo[i].table = table;
-		philo[i].last_meal = get_timestamp_ms();
 		philo[i].nb_of_philo = table->nb_of_philo;
 		philo[i].time_to_die = table->time_to_die;
 		philo[i].time_to_eat = table->time_to_eat;
 		philo[i].time_to_sleep = table->time_to_sleep;
 		philo[i].nb_of_time_to_eat = table->nb_of_time_to_eat;
+		philo[i].think_time = table->think_time;
 		i++;
 	}
 	return (philo);
-}
-
-bool	init_death(t_table *table)
-{
-	pthread_t	death_thread;
-	if (pthread_create(&death_thread, NULL, death_routine, table) != 0)
-	{
-		printf(RED"Failed to create death thread\n"RST);
-		return (false);
-	}
-	// if (pthread_join(death_thread, NULL) != 0)
-	// {
-	// 	printf(RED"Failed to join death thread\n"RST);
-	// 	return (false);
-	// }
-	return (true);
 }
 
 bool 	init_thread(ssize_t nb_of_philo, t_philo *philo, t_table *table)
@@ -120,10 +104,9 @@ bool 	init_thread(ssize_t nb_of_philo, t_philo *philo, t_table *table)
 	ssize_t	i;
 
 	i = -1;
-	if (init_death(table))
-		return (false);
 	while (++i < nb_of_philo)
 	{
+		philo[i].last_meal = table->start_simulation;
 		if (pthread_create(&threads[i], NULL, philo_routine, &philo[i]) != 0)
 		{
 			printf(RED"Failed to create thread %zu\n"RST, i);
@@ -157,7 +140,7 @@ bool	init_all(int argc, char **argv)
 		destroy_mutexes(&table);
 		return (false);
 	}
-	if (!init_thread(table.nb_of_philo, philo))
+	if (!init_thread(table.nb_of_philo, philo, &table))
 	{
 		destroy_mutexes(&table);
 		free(philo);
