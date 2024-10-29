@@ -21,7 +21,7 @@ void	*philo_routine(void *ptr)
 		usleep(1000);
 	if (philo->nb_of_philo == 1)
 		return (lonely_philo(philo), ptr);
-	while (!is_dead(philo) && philo->nb_of_time_to_eat != philo->nb_of_meal)
+	while (philo->nb_of_time_to_eat != philo->nb_of_meal)
 	{
 		if (!ft_eat(philo))
 			break ;
@@ -33,7 +33,6 @@ void	*philo_routine(void *ptr)
 	return (ptr);
 }
 
-
 void	lonely_philo(t_philo *philo)
 {
 	print_msg(philo, "is thinking", BLUE);
@@ -41,3 +40,5 @@ void	lonely_philo(t_philo *philo)
 	ft_usleep(philo->table->time_to_die, philo);
 	print_msg(philo, "is dead", YELLOW);
 }
+
+

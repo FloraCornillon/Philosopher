@@ -40,6 +40,8 @@ bool	ft_think(t_philo *philo)
 
 bool	ft_sleep(t_philo *philo)
 {
+	if (is_dead(philo))
+		return (false);
 	print_msg(philo, "is sleeping", MAG);
 	ft_usleep(philo->time_to_sleep, philo);
 	return (true);
@@ -47,12 +49,13 @@ bool	ft_sleep(t_philo *philo)
 
 bool	ft_eat(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->left_fork);
+	pthread_mutex_lock(philo->left_fork);
 	print_msg(philo, "has taken a fork", "");
-	pthread_mutex_lock(&philo->right_fork);
+	pthread_mutex_lock(philo->right_fork);
+	print_msg(philo, "has taken a fork", "");
 	print_msg(philo, "has taken a fork", "");
 	print_msg(philo, "is eating", GREEN);
-	pthread_mutex_lock(&philo->table->global);
+	pthread_mutex_lock(&philo->table->global);		
 	philo->last_meal = get_timestamp_ms();
 	if (philo->nb_of_time_to_eat != -2)
 		philo->nb_of_meal++;
@@ -71,7 +74,7 @@ bool	is_dead(t_philo *philo)
 		pthread_mutex_unlock(&philo->table->dead_lock);
 		return true;
 	}
-	if ((get_timestamp_ms() - philo->last_meal) > philo->time_to_die)
+	if ((get_timestamp_ms() - philo->last_meal) >= philo->time_to_die)
 	{
 		print_msg(philo, "died", YELLOW);
 		philo->table->dead = true;
