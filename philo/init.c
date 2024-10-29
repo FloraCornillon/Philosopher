@@ -38,14 +38,13 @@ bool	init_mutexes(t_table *table)
 	ssize_t	i;
 
 	i = 0;
-	table->forks = malloc(sizeof(t_fork) * table->nb_of_philo);
+	table->forks = malloc(sizeof(pthread_mutex_t) * table->nb_of_philo);
 	if (!table->forks)
 		return (false);
-	memset(table->forks, 0, sizeof(t_fork) * table->nb_of_philo);
+	memset(table->forks, 0, sizeof(pthread_mutex_t) * table->nb_of_philo);
 	while (i < table->nb_of_philo)
 	{
-		table->forks[i].available = true;
-		if (pthread_mutex_init(&table->forks[i].fork, NULL) != 0)
+		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
 		{
 			printf(RED"Failed to init mutex %zu\n"RST, i);
 			return (false);
@@ -75,18 +74,18 @@ t_philo	*init_philo(t_table *table)
 	while (i < table->nb_of_philo)
 	{
 		philo[i].id = i + 1;
-		// if (i % 2 == 0)
-		// {
-		// 	philo[i].left_fork = &table->forks[i];
-		// 	philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
-		// }
-		// else
-		// {
-		// 	philo[i].right_fork = &table->forks[i];
-		// 	philo[i].left_fork = &table->forks[(i + 1) % table->nb_of_philo];
-		// }
-		philo[i].left_fork = &table->forks[i];
-		philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
+		if (i % 2 == 0)
+		{
+			philo[i].left_fork = &table->forks[i];
+			philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
+		}
+		else
+		{
+			philo[i].right_fork = &table->forks[i];
+			philo[i].left_fork = &table->forks[(i + 1) % table->nb_of_philo];
+		}
+		// philo[i].left_fork = &table->forks[i];
+		// philo[i].right_fork = &table->forks[(i + 1) % table->nb_of_philo];
 		philo[i].table = table;
 		philo[i].last_meal = get_timestamp_ms();
 		philo[i].nb_of_philo = table->nb_of_philo;

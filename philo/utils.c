@@ -36,7 +36,7 @@ void	destroy_mutexes(t_table *table)
 	i = 0;
 	while (i < table->nb_of_philo)
 	{
-		pthread_mutex_destroy(&table->forks[i].fork);
+		pthread_mutex_destroy(&table->forks[i]);
 		i++;
 	}
 	pthread_mutex_destroy(&table->global);
@@ -59,10 +59,11 @@ bool	ft_usleep(size_t time, t_philo *philo)
 	size_t	start;
 
 	start = get_timestamp_ms();
+	(void)philo;
 	while (get_timestamp_ms() - start < time)
 	{
-		if (is_dead(philo))
-			return (false);
+		// if (is_dead(philo))
+		// 	return (false);
 		usleep(500);
 	}
 	return (true);

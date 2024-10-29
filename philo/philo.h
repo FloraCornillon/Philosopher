@@ -34,11 +34,6 @@
 #define THINK BLUE
 #define DEAD YELLOW
 
-typedef struct s_fork
-{
-	bool	available;
-	pthread_mutex_t	fork;
-}	t_fork;
 
 typedef struct s_table
 {
@@ -48,7 +43,7 @@ typedef struct s_table
 	ssize_t	time_to_sleep;
 	ssize_t	start_simulation;
 	ssize_t	nb_of_time_to_eat;
-	t_fork	*forks;
+	pthread_mutex_t	*forks;
 	pthread_mutex_t global;
 	pthread_mutex_t write_lock;
 	pthread_mutex_t dead_lock;
@@ -60,8 +55,8 @@ typedef struct s_philo
 	size_t	id;
 	ssize_t	nb_of_meal;
 	ssize_t	last_meal;
-	t_fork *left_fork;
-	t_fork *right_fork;
+	pthread_mutex_t *left_fork;
+	pthread_mutex_t *right_fork;
 	ssize_t	nb_of_philo;
 	ssize_t	time_to_die;
 	ssize_t	time_to_eat;
@@ -90,7 +85,6 @@ bool	ft_sleep(t_philo *philo);
 bool	ft_think(t_philo *philo);
 bool	ft_eat(t_philo *philo);
 bool	is_dead(t_philo *philo);
-bool	check_if_full(t_philo *philo);
 void	lonely_philo(t_philo *philo);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
