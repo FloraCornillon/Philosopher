@@ -6,27 +6,11 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:20:13 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/29 17:31:10 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/29 17:53:34 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-
-
-void	print_msg(t_philo *philo, const char *msg, const char *color)
-{
-	size_t	time;
-	static bool	print = true;
-
-	pthread_mutex_lock(&philo->table->write_lock);
-	time = (get_timestamp_ms() - philo->table->start_simulation);
-	if (print)
-		printf("%s%zu %02zu %s%s\n", color, time, philo->id, msg, RST);
-	if (!ft_strncmp(msg, "died", 4))
-		print = false;
-	pthread_mutex_unlock(&philo->table->write_lock);
-}
 
 bool	take_fork(t_philo *philo)
 {
@@ -43,7 +27,7 @@ bool	take_fork(t_philo *philo)
 bool	ft_think(t_philo *philo)
 {
 	bool	ret;
-	
+
 	ret = true;
 	if (is_dead(philo))
 		return (false);
@@ -61,7 +45,6 @@ bool	ft_think(t_philo *philo)
 	print_msg(philo, "has taken a fork", "");
 	return (ret);
 }
-
 
 bool	ft_sleep(t_philo *philo)
 {
@@ -93,7 +76,3 @@ bool	ft_eat(t_philo *philo)
 	pthread_mutex_unlock(&philo->table->global);
 	return (true);
 }
-
-
-
-

@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:00:38 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/29 17:29:51 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/29 17:49:47 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	*philo_routine(void *ptr)
 	return (ptr);
 }
 
-
 void	lonely_philo(t_philo *philo)
 {
 	print_msg(philo, "is thinking", BLUE);
@@ -48,15 +47,15 @@ bool	is_dead(t_philo *philo)
 	if (philo->table->dead)
 	{
 		pthread_mutex_unlock(&philo->table->dead_lock);
-		return true;
+		return (true);
 	}
 	if (get_timestamp_ms() - philo->last_meal > philo->time_to_die)
 	{
 		print_msg(philo, "died", YELLOW);
-	 	philo->table->dead = true;
-	 	pthread_mutex_unlock(&philo->table->dead_lock);
-	 	return true;
+		philo->table->dead = true;
+		pthread_mutex_unlock(&philo->table->dead_lock);
+		return (true);
 	}
 	pthread_mutex_unlock(&philo->table->dead_lock);
-	return false;
+	return (false);
 }
