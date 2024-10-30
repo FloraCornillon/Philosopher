@@ -32,7 +32,7 @@ bool	ft_think(t_philo *philo)
 	if (is_dead(philo))
 		return (false);
 	print_msg(philo, "is thinking", BLUE);
-	ft_usleep(philo->think_time, philo);
+	ft_usleep(philo->think_time);
 	while (!take_fork(philo))
 	{
 		usleep(100);
@@ -49,7 +49,7 @@ bool	ft_think(t_philo *philo)
 bool	ft_sleep(t_philo *philo)
 {
 	print_msg(philo, "is sleeping", MAG);
-	ft_usleep(philo->time_to_sleep, philo);
+	ft_usleep(philo->time_to_sleep);
 	if (is_dead(philo))
 		return (false);
 	return (true);
@@ -61,7 +61,7 @@ bool	ft_eat(t_philo *philo)
 	print_msg(philo, "is eating", GREEN);
 	if (philo->nb_of_time_to_eat != -2)
 		philo->nb_of_meal++;
-	ft_usleep(philo->time_to_eat, philo);
+	ft_usleep(philo->time_to_eat);
 	if (is_dead(philo))
 	{
 		pthread_mutex_unlock(&philo->left_fork->mutex);

@@ -35,12 +35,11 @@ ssize_t	get_timestamp_ms(void)
 	return (now.tv_sec * 1000 + now.tv_usec / 1000);
 }
 
-bool	ft_usleep(size_t time, t_philo *philo)
+bool	ft_usleep(size_t time)
 {
 	size_t	start;
 
 	start = get_timestamp_ms();
-	(void)philo;
 	while (get_timestamp_ms() - start < time)
 		usleep(500);
 	return (true);

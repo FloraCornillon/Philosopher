@@ -37,7 +37,7 @@ void	lonely_philo(t_philo *philo)
 {
 	print_msg(philo, "is thinking", BLUE);
 	print_msg(philo, "has taken a fork", "");
-	ft_usleep(philo->table->time_to_die, philo);
+	ft_usleep(philo->table->time_to_die);
 	print_msg(philo, "is dead", YELLOW);
 }
 

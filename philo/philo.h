@@ -100,7 +100,7 @@ int					error_handle(const char *str, int ret);
 void				destroy_mutexes_and_free(t_table *table);
 void				*ft_calloc(size_t count, size_t size);
 ssize_t				get_timestamp_ms(void);
-bool				ft_usleep(size_t time, t_philo *philo);
+bool				ft_usleep(size_t time);
 void				print_msg(t_philo *philo, const char *msg, \
 const char *color);
 bool				ft_sleep(t_philo *philo);
