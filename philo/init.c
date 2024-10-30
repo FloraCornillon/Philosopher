@@ -32,7 +32,8 @@ bool	init_table(int argc, char **argv, t_table *table)
 		|| table->time_to_eat == -1 || table->time_to_sleep == -1
 		|| table->nb_of_time_to_eat == -1)
 		return (false);
-	return (true);
+	table->threads = malloc(sizeof(pthread_t) * table->nb_of_philo);
+	return (table->threads);
 }
 
 bool	init_mutexes(t_table *table)
@@ -63,15 +64,15 @@ bool	init_mutexes(t_table *table)
 	return (true);
 }
 
-bool	init_thread(ssize_t nb_of_philo, t_philo **philo, t_table *table)
+bool	init_thread(ssize_t nb_of_philo, t_philo *philo, t_table *table)
 {
 	ssize_t		i;
 
 	i = -1;
 	while (++i < nb_of_philo)
 	{
-		philo[i]->last_meal = table->start_simulation;
-		if (pthread_create(&philo[i]->thread, NULL, philo_routine, &philo[i]) \
+		philo[i].last_meal = table->start_simulation;
+		if (pthread_create(&table->threads[i], NULL, philo_routine, &philo[i]) \
 	!= 0)
 		{
 			printf(RED "Failed to create thread %zu\n" RST, i);
@@ -81,7 +82,7 @@ bool	init_thread(ssize_t nb_of_philo, t_philo **philo, t_table *table)
 	i = -1;
 	while (++i < nb_of_philo)
 	{
-		if (pthread_join(philo[i]->thread, NULL) != 0)
+		if (pthread_join(table->threads[i], NULL) != 0)
 		{
 			printf(RED "Failed to join thread %zu\n" RST, i);
 			return (false);

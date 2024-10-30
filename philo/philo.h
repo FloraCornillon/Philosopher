@@ -51,6 +51,7 @@ typedef struct s_fork
 	pthread_mutex_t	mutex;
 }					t_fork;
 
+
 typedef struct s_table
 {
 	ssize_t			nb_of_philo;
@@ -61,6 +62,7 @@ typedef struct s_table
 	ssize_t			nb_of_time_to_eat;
 	ssize_t			think_time;
 	t_fork			*forks;
+	pthread_t		*threads;
 	pthread_mutex_t	global;
 	pthread_mutex_t	write_lock;
 	pthread_mutex_t	dead_lock;
@@ -72,7 +74,6 @@ typedef struct s_philo
 	size_t			id;
 	t_fork			*left_fork;
 	t_fork			*right_fork;
-	pthread_t		thread;
 	ssize_t			nb_of_meal;
 	ssize_t			last_meal;
 	ssize_t			nb_of_philo;
@@ -81,8 +82,6 @@ typedef struct s_philo
 	ssize_t			time_to_sleep;
 	ssize_t			nb_of_time_to_eat;
 	ssize_t			think_time;
-	ssize_t			start_waiting;
-	ssize_t			wating_fork;
 	t_table			*table;
 }					t_philo;
 
@@ -92,8 +91,8 @@ size_t				ft_strlen(const char *str);
 ssize_t				ft_atosst(const char *str, size_t i);
 bool				init_table(int argc, char **argv, t_table *table);
 void				*philo_routine(void *arg);
-t_philo				**init_philo(t_table *table);
-bool				init_thread(ssize_t nb_of_philo, t_philo **philo, \
+t_philo				*init_philo(t_table *table);
+bool				init_thread(ssize_t nb_of_philo, t_philo *philo, \
 t_table *table);
 bool				init_mutexes(t_table *table);
 bool				init_all(int argc, char **argv);

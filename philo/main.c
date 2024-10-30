@@ -15,7 +15,7 @@
 bool	init_all(int argc, char **argv)
 {
 	t_table	table;
-	t_philo	**philo;
+	t_philo	*philo;
 
 	if (!init_table(argc, argv, &table))
 		return (false);
@@ -30,11 +30,11 @@ bool	init_all(int argc, char **argv)
 	if (!init_thread(table.nb_of_philo, philo, &table))
 	{
 		destroy_mutexes(&table);
-		free_philos(philo, table.nb_of_philo);
+		free(philo);
 		return (false);
 	}
 	destroy_mutexes(&table);
-	free_philos(philo, table.nb_of_philo);
+	free(philo);
 	return (true);
 }
 
