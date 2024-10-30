@@ -21,6 +21,10 @@ bool	init_table(int argc, char **argv, t_table *table)
 	table->time_to_die = ft_atosst(argv[2], 2);
 	table->time_to_eat = ft_atosst(argv[3], 3);
 	table->time_to_sleep = ft_atosst(argv[4], 4);
+	if (table->nb_of_philo == -1 || table->time_to_die == -1
+		|| table->time_to_eat == -1 || table->time_to_sleep == -1
+		|| table->nb_of_time_to_eat == -1)
+		return (false);
 	table->start_simulation = get_timestamp_ms();
 	table->think_time = get_think_tm(table);
 	table->dead = false;
@@ -28,10 +32,6 @@ bool	init_table(int argc, char **argv, t_table *table)
 		table->nb_of_time_to_eat = ft_atosst(argv[5], 5);
 	else
 		table->nb_of_time_to_eat = -2;
-	if (table->nb_of_philo == -1 || table->time_to_die == -1
-		|| table->time_to_eat == -1 || table->time_to_sleep == -1
-		|| table->nb_of_time_to_eat == -1)
-		return (false);
 	table->threads = ft_calloc(table->nb_of_philo, sizeof(pthread_t));
 	if (!table->threads)
 		return (false);
