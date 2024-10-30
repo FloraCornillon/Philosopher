@@ -28,7 +28,7 @@ int	error_handle(const char *str, int ret)
 	return (ret);
 }
 
-void	destroy_mutexes(t_table *table)
+void	destroy_mutexes_and_free(t_table *table)
 {
 	ssize_t	i;
 
@@ -41,22 +41,10 @@ void	destroy_mutexes(t_table *table)
 	pthread_mutex_destroy(&table->global);
 	pthread_mutex_destroy(&table->write_lock);
 	pthread_mutex_destroy(&table->dead_lock);
+	free(table->threads);
 	free(table->forks);
 }
 
-void	free_philos(t_philo **philo, ssize_t nb_of_philo)
-{
-	ssize_t	i;
-
-	i = 0;
-	while (i < nb_of_philo)
-	{
-		if (philo[i])
-			free(philo[i]);
-		i++;
-	}
-	free(philo);
-}
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {

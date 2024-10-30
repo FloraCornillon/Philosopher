@@ -51,16 +51,16 @@ bool	init_mutexes(t_table *table)
 		if (pthread_mutex_init(&table->forks[i].mutex, NULL) != 0)
 		{
 			printf(RED "Failed to init mutex %zu\n" RST, i);
-			return (false);
+			while (--i >= 0)  // Détruire les mutex déjà initialisés
+                pthread_mutex_destroy(&table->forks[i].mutex);
+            return (free(table->forks), free(table->threads), false);
 		}
 		i++;
 	}
-	if (pthread_mutex_init(&table->global, NULL) != 0)
-		return (false);
-	if (pthread_mutex_init(&table->write_lock, NULL) != 0)
-		return (false);
-	if (pthread_mutex_init(&table->dead_lock, NULL) != 0)
-		return (false);
+	if (pthread_mutex_init(&table->global, NULL) != 0 || \
+        pthread_mutex_init(&table->write_lock, NULL) != 0 || \
+        pthread_mutex_init(&table->dead_lock, NULL) != 0)
+        	destroy_mutexes_and_free(table); 
 	return (true);
 }
 

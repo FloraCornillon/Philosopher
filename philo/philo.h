@@ -97,7 +97,7 @@ t_table *table);
 bool				init_mutexes(t_table *table);
 bool				init_all(int argc, char **argv);
 int					error_handle(const char *str, int ret);
-void				destroy_mutexes(t_table *table);
+void				destroy_mutexes_and_free(t_table *table);
 ssize_t				get_timestamp_ms(void);
 bool				ft_usleep(size_t time, t_philo *philo);
 void				print_msg(t_philo *philo, const char *msg, \
@@ -111,6 +111,5 @@ int					ft_strncmp(const char *s1, const char *s2, size_t n);
 void				*philo_routine(void *ptr);
 ssize_t				get_think_tm(t_table *table);
 bool				take_fork(t_philo *philo);
-void				free_philos(t_philo **philo, ssize_t nb_of_philo);
 
 #endif

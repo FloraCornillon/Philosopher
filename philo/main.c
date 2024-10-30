@@ -24,16 +24,16 @@ bool	init_all(int argc, char **argv)
 	philo = init_philo(&table);
 	if (!philo)
 	{
-		destroy_mutexes(&table);
+		destroy_mutexes_and_free(&table);
 		return (false);
 	}
 	if (!init_thread(table.nb_of_philo, philo, &table))
 	{
-		destroy_mutexes(&table);
+		destroy_mutexes_and_free(&table);
 		free(philo);
 		return (false);
 	}
-	destroy_mutexes(&table);
+	destroy_mutexes_and_free(&table);
 	free(philo);
 	return (true);
 }
