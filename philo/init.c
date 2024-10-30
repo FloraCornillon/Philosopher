@@ -32,8 +32,10 @@ bool	init_table(int argc, char **argv, t_table *table)
 		|| table->time_to_eat == -1 || table->time_to_sleep == -1
 		|| table->nb_of_time_to_eat == -1)
 		return (false);
-	table->threads = malloc(sizeof(pthread_t) * table->nb_of_philo);
-	return (table->threads);
+	table->threads = ft_calloc(table->nb_of_philo, sizeof(pthread_t));
+	if (!table->threads)
+		return (false);
+	return (true);
 }
 
 bool	init_mutexes(t_table *table)
@@ -41,17 +43,16 @@ bool	init_mutexes(t_table *table)
 	ssize_t	i;
 
 	i = 0;
-	table->forks = malloc(sizeof(t_fork) * table->nb_of_philo);
+	table->forks = ft_calloc(table->nb_of_philo, sizeof(t_fork));
 	if (!table->forks)
 		return (false);
-	memset(table->forks, 0, sizeof(t_fork) * table->nb_of_philo);
 	while (i < table->nb_of_philo)
 	{
 		table->forks[i].available = true;
 		if (pthread_mutex_init(&table->forks[i].mutex, NULL) != 0)
 		{
 			printf(RED "Failed to init mutex %zu\n" RST, i);
-			while (--i >= 0)  // Détruire les mutex déjà initialisés
+			while (--i >= 0)
                 pthread_mutex_destroy(&table->forks[i].mutex);
             return (free(table->forks), free(table->threads), false);
 		}

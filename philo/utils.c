@@ -62,3 +62,14 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	}
 	return (0);
 }
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*ptr;
+
+	ptr = malloc(count * size);
+	if (!ptr)
+		return (NULL);
+	memset(ptr, 0, count * size);
+	return (ptr);
+}

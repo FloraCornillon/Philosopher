@@ -12,17 +12,6 @@
 
 #include "philo.h"
 
-static t_philo	*alloc_philos(t_table *table)
-{
-	t_philo	*philo;
-
-	philo = malloc(sizeof(t_philo) * table->nb_of_philo);
-	if (!philo)
-		return (NULL);
-	memset(philo, 0, sizeof(t_philo) * table->nb_of_philo);
-	return (philo);
-}
-
 static void	setup_philo(t_philo *philo, t_table *table)
 {
 	ssize_t	i;
@@ -56,7 +45,7 @@ t_philo	*init_philo(t_table *table)
 {
 	t_philo	*philo;
 
-	philo = alloc_philos(table);
+	philo = ft_calloc(table->nb_of_philo, sizeof(t_philo));
 	if (!philo)
 		return (NULL);
 	setup_philo(philo, table);
