@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:44:15 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/29 18:26:09 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/31 13:40:03 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,28 +53,28 @@ bool	init_mutexes(t_table *table)
 		{
 			printf(RED "Failed to init mutex %zu\n" RST, i);
 			while (--i >= 0)
-                pthread_mutex_destroy(&table->forks[i].mutex);
-            return (free(table->forks), free(table->threads), false);
+				pthread_mutex_destroy(&table->forks[i].mutex);
+			return (free(table->forks), free(table->threads), false);
 		}
 		i++;
 	}
-	if (pthread_mutex_init(&table->global, NULL) != 0 || \
-        pthread_mutex_init(&table->write_lock, NULL) != 0 || \
-        pthread_mutex_init(&table->dead_lock, NULL) != 0)
-        	destroy_mutexes_and_free(table); 
+	if (pthread_mutex_init(&table->global, NULL) != 0
+		|| pthread_mutex_init(&table->write_lock, NULL) != 0
+		|| pthread_mutex_init(&table->dead_lock, NULL) != 0)
+		destroy_mutexes_and_free(table);
 	return (true);
 }
 
 bool	init_thread(ssize_t nb_of_philo, t_philo *philo, t_table *table)
 {
-	ssize_t		i;
+	ssize_t	i;
 
 	i = -1;
 	while (++i < nb_of_philo)
 	{
 		philo[i].last_meal = table->start_simulation;
-		if (pthread_create(&table->threads[i], NULL, philo_routine, &philo[i]) \
-	!= 0)
+		if (pthread_create(&table->threads[i], NULL, philo_routine,
+				&philo[i]) != 0)
 		{
 			printf(RED "Failed to create thread %zu\n" RST, i);
 			return (false);

@@ -6,7 +6,7 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 17:17:04 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/29 18:19:39 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/31 13:41:51 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	destroy_mutexes_and_free(t_table *table)
 	free(table->threads);
 	free(table->forks);
 }
-
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
