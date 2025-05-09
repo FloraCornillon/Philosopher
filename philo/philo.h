@@ -6,12 +6,12 @@
 /*   By: fcornill <fcornill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:44 by fcornill          #+#    #+#             */
-/*   Updated: 2024/10/29 18:25:56 by fcornill         ###   ########.fr       */
+/*   Updated: 2024/10/31 17:05:24 by fcornill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_HPP
-# define PHILO_HPP
+#ifndef PHILO_H
+# define PHILO_H
 
 # include <limits.h>
 # include <pthread.h>
@@ -22,7 +22,7 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-# define COLORS 0
+# define COLORS 1
 
 # if (COLORS)
 #  define RST "\033[0m"
@@ -50,7 +50,6 @@ typedef struct s_fork
 	bool			available;
 	pthread_mutex_t	mutex;
 }					t_fork;
-
 
 typedef struct s_table
 {
@@ -100,7 +99,7 @@ int					error_handle(const char *str, int ret);
 void				destroy_mutexes_and_free(t_table *table);
 void				*ft_calloc(size_t count, size_t size);
 ssize_t				get_timestamp_ms(void);
-bool				ft_usleep(size_t time);
+bool				ft_usleep(size_t time, t_philo *philo);
 void				print_msg(t_philo *philo, const char *msg, \
 const char *color);
 bool				ft_sleep(t_philo *philo);
